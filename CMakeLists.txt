@@ -11,9 +11,17 @@ include_directories(${SOURCES})
 
 set(
         SOURCE_FILES
+
         ${HEADERS}/Card.h
+        ${HEADERS}/Spell_card.h
+        ${HEADERS}/Combat_card.h
+        ${HEADERS}/Hero_buff_card.h
+
         ${SOURCES}/Card.cpp
-        main.cpp
-)
+        ${SOURCES}/Spell_card.cpp
+        ${SOURCES}/Combat_card.cpp
+        ${SOURCES}/Hero_buff_card.cpp
+
+        main.cpp    )
 
 add_executable(CardGame ${SOURCE_FILES})

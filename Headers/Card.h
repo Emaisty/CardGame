@@ -2,9 +2,12 @@
 
 class Card {
 public:
-    Card(int attack, int hp);
+    Card(const std::string &name);
 
 protected:
-    int attack;
-    int hp;
+    enum class_of_card {
+        defensive, attacking, healing, spell, weapon, armor
+    };
+
+    std::string name;
 };
