@@ -3,9 +3,9 @@
 
 #include "Card.h"
 
-class Combat_card : Card {
+class Combat_card : public Card {
 public:
-    Combat_card(const std::string &name, int hp, int attack);
+    Combat_card(const std::string &name = "", int hp = 0, int attack = 0);
 
     void setHp(int hp);
 

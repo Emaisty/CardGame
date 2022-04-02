@@ -24,6 +24,6 @@ set(
         ${SOURCES}/Hero_buff_card.cpp
         ${SOURCES}/Player.cpp
 
-        main.cpp)
+        main.cpp Headers/Game.h Sources/Game.cpp)
 
 add_executable(CardGame ${SOURCE_FILES})

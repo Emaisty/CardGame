@@ -3,7 +3,7 @@
 
 #include "Card.h"
 
-class Hero_buff_card : Card {
+class Hero_buff_card : public Card {
 public:
     Hero_buff_card(const std::string &name, int value);
 

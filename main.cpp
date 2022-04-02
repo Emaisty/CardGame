@@ -3,6 +3,5 @@
 
 int main() {
     Card lol;
-
     return 0;
 }

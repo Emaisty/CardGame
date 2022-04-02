@@ -3,7 +3,7 @@
 
 #include "Card.h"
 
-class Spell_card : Card {
+class Spell_card : public Card {
 public:
     Spell_card(const std::string &name, bool target, int value);
 
