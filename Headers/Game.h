@@ -7,9 +7,13 @@ class Game {
 public:
     Game(Player player1, Player player2);
 
-    void round(Player &player,Player &opponent);
+    void round(Player &player, Player &opponent);
 
-    void printInformation(Player &player,Player &opponent);
+    void printInformation(Player &player, Player &opponent);
+
+    void printPlayerHandInformation(Player &player);
+
+    void printPlayerInformation(Player &player);
 
     const Player &getPlayer1() const;
 

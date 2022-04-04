@@ -29,8 +29,7 @@ public:
 
     int getWeapon() const;
 
-
-    void getDamage(int damage);
+    void takeDamage(int damage);
 
     bool ifPlayerAlive();
 
@@ -59,6 +58,8 @@ public:
     const std::string &getName() const;
 
     void setName(const std::string &name);
+
+
 
 protected:
     int hp, armor, weapon;

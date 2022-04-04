@@ -25,7 +25,7 @@ void Player::setWeapon(int weapon) {
     Player::weapon = weapon;
 }
 
-void Player::getDamage(int damage) {
+void Player::takeDamage(int damage) {
     Player::hp -= damage;
 }
 
@@ -76,7 +76,7 @@ void Player::useSpell(int number_of_card) {
 
 void Player::useHeroCard(int number_od_card) {
     if (this->player_heroes_cards[number_od_card].getTypeOfClass() == Card::class_of_card::armor)
-        setArmor(this->player_heroes_cards[number_od_card].getValue());
+        this->armor += this->player_heroes_cards[number_od_card].getValue();
     if (this->player_heroes_cards[number_od_card].getTypeOfClass() == Card::class_of_card::weapon)
         setWeapon(this->player_heroes_cards[number_od_card].getValue());
 }
