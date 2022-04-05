@@ -26,6 +26,6 @@ set(
         ${SOURCES}/Player.cpp
         ${SOURCES}/Game.cpp
 
-        main.cpp)
+        main.cpp Sources/Menu.cpp Headers/Menu.h Headers/CardDecks.h Sources/CardDecks.cpp)
 
 add_executable(CardGame ${SOURCE_FILES})
