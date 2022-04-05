@@ -1,7 +1,9 @@
 #include "Game.h"
 
 
-Game::Game(Player player1, Player player2) : player1(player1), player2(player2) {
+Game::Game(Player player1, Player player2) : player1(player1), player2(player2) {}
+
+void Game::run() {
     while (player1.ifPlayerAlive() && player2.ifPlayerAlive()) {
         if (which_turn == 1) {
             round(player1, player2);
@@ -11,20 +13,34 @@ Game::Game(Player player1, Player player2) : player1(player1), player2(player2) 
             which_turn = 1;
         }
     }
-
 }
 
 void Game::round(Player &player, Player &opponent) {
+    checkingPassword();
     printInformation(player, opponent);
     std::string input;
     std::cin >> input;
     while (input != "end") {
 
+        std::cin >> input;
+    }
+    system("clear");
+}
+
+
+void Game::checkingPassword() {
+    std::string password;
+    std::cout << "Enter password: ";
+    std::cin >> password;
+    while (this->password != password) {
+        system("clear");
+        std::cout << "Wrong password. Please, give correct one:";
+        std::cin >> password;
     }
 }
 
 void Game::printInformation(Player &player, Player &opponent) {
-    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    system("clear");
     printPlayerInformation(opponent);
     std::cout << "\n\n";
     std::cout << "==========================================================================================";

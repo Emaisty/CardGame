@@ -17,13 +17,15 @@ set(
         ${HEADERS}/Combat_card.h
         ${HEADERS}/Hero_buff_card.h
         ${HEADERS}/Player.h
+        ${HEADERS}/Game.h
 
         ${SOURCES}/Card.cpp
         ${SOURCES}/Spell_card.cpp
         ${SOURCES}/Combat_card.cpp
         ${SOURCES}/Hero_buff_card.cpp
         ${SOURCES}/Player.cpp
+        ${SOURCES}/Game.cpp
 
-        main.cpp Headers/Game.h Sources/Game.cpp)
+        main.cpp)
 
 add_executable(CardGame ${SOURCE_FILES})

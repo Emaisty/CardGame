@@ -1,7 +1,8 @@
 #include <iostream>
-#include "Card.h"
+#include "Game.h"
 
 int main() {
-    Card lol;
+    Game game(Player("BAZA1", 30), Player("BAZA2", 30));
+    game.run();
     return 0;
 }

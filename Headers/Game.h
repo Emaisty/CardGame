@@ -7,7 +7,11 @@ class Game {
 public:
     Game(Player player1, Player player2);
 
+    void run();
+
     void round(Player &player, Player &opponent);
+
+    void checkingPassword();
 
     void printInformation(Player &player, Player &opponent);
 
@@ -22,6 +26,7 @@ public:
 protected:
     Player player1, player2;
     int which_turn = 1;
+    std::string password = "123";
 };
 
 #endif //CARDGAME_GAME_H

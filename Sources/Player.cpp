@@ -89,5 +89,5 @@ const std::string &Player::getName() const {
     return name;
 }
 
-Player::Player(int hp, int armor, int weapon, const std::string &name) : hp(hp), armor(armor), weapon(weapon),
-                                                                         name(name) {}
+Player::Player(const std::string &name, int hp, int armor, int weapon) : name(name), hp(hp), armor(armor),
+                                                                         weapon(weapon) {}

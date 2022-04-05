@@ -15,7 +15,7 @@
 
 class Player {
 public:
-    Player(int hp, int armor, int weapon, const std::string &name);
+    Player(const std::string &name, int hp, int armor = 0, int weapon = 0);
 
     void setHp(int hp);
 
@@ -60,7 +60,6 @@ public:
     void setName(const std::string &name);
 
 
-
 protected:
     int hp, armor, weapon;
     std::string name;
@@ -68,5 +67,6 @@ protected:
     std::vector<Hero_buff_card> player_heroes_cards;
     std::vector<Spell_card> player_spell_cards;
 };
+
 
 #endif
