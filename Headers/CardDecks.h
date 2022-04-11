@@ -14,6 +14,12 @@ public:
 
     const std::vector<Hero_buff_card> &getHeroCards() const;
 
+    void setCombatCards(const std::vector<Combat_card> &combatCards);
+
+    void setSpellCards(const std::vector<Spell_card> &spellCards);
+
+    void setHeroCards(const std::vector<Hero_buff_card> &heroCards);
+
 private:
     std::vector<Combat_card> Combat_cards;
     std::vector<Spell_card> Spell_cards;

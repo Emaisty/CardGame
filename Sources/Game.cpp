@@ -64,16 +64,16 @@ void Game::printPlayerInformation(Player &player) {
 
 void Game::printPlayerHandInformation(Player &player) {
     std::cout << "Cards :";
-    int i, j, k;
-    for (i = 0; i < player.getPlayerCombatCards().size(); ++i) {
+    int i = 0, j = 0, k = 0;
+    for (; i < player.getPlayerCombatCards().size(); ++i) {
         Card card = player.getPlayerCombatCards()[i];
         std::cout << " (" << i + j + k + 1 << ") " << card.getName();
     }
-    for (j = 0; j < player.getPlayerSpellCards().size(); ++j) {
+    for (; j < player.getPlayerSpellCards().size(); ++j) {
         Card card = player.getPlayerSpellCards()[j];
         std::cout << " (" << i + j + k + 1 << ") " << card.getName();
     }
-    for (k = 0; k < player.getPlayerHeroesCards().size(); ++k) {
+    for (; k < player.getPlayerHeroesCards().size(); ++k) {
         Card card = player.getPlayerHeroesCards()[k];
         std::cout << " (" << i + j + k + 1 << ") " << card.getName();
     }

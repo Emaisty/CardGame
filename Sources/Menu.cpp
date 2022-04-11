@@ -23,7 +23,7 @@ void Choose_deck(Player &player) {
     std::cout << "Choose your deck (list of decks can be seen in main menu): ";
     int user_input;
     std::cin >> user_input;
-    while (user_input < 0 || user_input > allDecks.getAllCards().size()) {
+    while (user_input < 0 || user_input >= allDecks.getAllCards().size()) {
         std::cout << "Invalid input. Please choose right deck: ";
         std::cin >> user_input;
     }

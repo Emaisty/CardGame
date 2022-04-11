@@ -5,7 +5,7 @@
 
 class Hero_buff_card : public Card {
 public:
-    Hero_buff_card(const std::string &name, int value);
+    Hero_buff_card(const std::string &name = "", int value = 0);
 
     void setValue(int value);
 

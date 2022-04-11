@@ -5,7 +5,7 @@
 
 class Spell_card : public Card {
 public:
-    Spell_card(const std::string &name, bool target, int value);
+    Spell_card(const std::string &name = "", bool target = 0, int value = 0);
 
     void setTarget(bool target);
 
