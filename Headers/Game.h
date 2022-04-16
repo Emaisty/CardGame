@@ -20,6 +20,8 @@ public:
 
     void printPlayerInformation(Player &player);
 
+    bool playCardFromHand(Player &player);
+
     const Player &getPlayer1() const;
 
     const Player &getPlayer2() const;

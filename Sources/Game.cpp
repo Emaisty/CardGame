@@ -21,6 +21,15 @@ void Game::round(Player &player, Player &opponent) {
     std::string input;
     std::cin >> input;
     while (input != "end") {
+        if (input == "attack") {
+
+        } else if (input == "hand") {
+            if (!playCardFromHand(player)) {
+
+            }
+        } else {
+
+        }
 
         std::cin >> input;
     }
@@ -77,6 +86,21 @@ void Game::printPlayerHandInformation(Player &player) {
         Card card = player.getPlayerHeroesCards()[k];
         std::cout << " (" << i + j + k + 1 << ") " << card.getName();
     }
+}
+
+bool Game::playCardFromHand(Player &player) {
+    int size_of_cards = player.getPlayerCombatCards().size() + player.getPlayerSpellCards().size() +
+                        player.getPlayerHeroesCards().size();
+    int number_of_card = -1;
+
+    std::cin >> number_of_card;
+    if (number_of_card > size_of_cards) {
+        return false;
+    }
+    if (number_of_card < player.getPlayerCombatCards().size())
+        player.fromHandtoField(number_of_card + 1);
+    //TODO if spell card or hero card
+    return true;
 }
 
 const Player &Game::getPlayer1() const {
