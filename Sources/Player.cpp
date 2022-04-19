@@ -65,12 +65,24 @@ void Player::setPlayerSpellCards(const std::vector<Spell_card> &playerSpellCards
     player_spell_cards = playerSpellCards;
 }
 
+void Player::killUnit(int number_of_card) {
+    this->player_filed.erase(this->player_filed.begin() + number_of_card);
+}
+
+void Player::damageOnUnit(int number_of_card, int value) {
+    this->player_filed[number_of_card].getDamage(value);
+}
+
+void Player::healOnUnit(int number_of_card, int value) {
+    this->player_filed[number_of_card].getHeal(value);
+}
+
 void Player::fromHandtoField(int number_of_card) {
     this->player_filed.push_back(this->player_combat_cards[number_of_card]);
     this->player_combat_cards.erase(this->player_combat_cards.begin() + number_of_card);
 }
 
-void Player::useSpell(int number_of_card) {
+void Player::useSpellCard(int number_of_card) {
     this->player_spell_cards.erase(this->player_spell_cards.begin() + number_of_card);
 }
 
@@ -79,6 +91,7 @@ void Player::useHeroCard(int number_od_card) {
         this->armor += this->player_heroes_cards[number_od_card].getValue();
     if (this->player_heroes_cards[number_od_card].getTypeOfClass() == Card::class_of_card::weapon)
         setWeapon(this->player_heroes_cards[number_od_card].getValue());
+    this->player_heroes_cards.erase(this->player_heroes_cards.begin() + number_od_card);
 }
 
 void Player::setName(const std::string &name) {

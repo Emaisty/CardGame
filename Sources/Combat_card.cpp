@@ -6,6 +6,14 @@ int Combat_card::getHp() const {
     return hp;
 }
 
+void Combat_card::getDamage(int damage) {
+    hp -= damage;
+}
+
+void Combat_card::getHeal(int heal) {
+    hp += heal;
+}
+
 int Combat_card::getAttack() const {
     return attack;
 }

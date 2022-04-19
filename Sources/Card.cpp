@@ -13,3 +13,7 @@ const std::string &Card::getName() const {
 Card::class_of_card Card::getTypeOfClass() const {
     return type_of_class;
 }
+
+void Card::setTypeOfClass(Card::class_of_card typeOfClass) {
+    type_of_class = typeOfClass;
+}

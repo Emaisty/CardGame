@@ -9,6 +9,10 @@ public:
 
     void setHp(int hp);
 
+    void getDamage(int damage);
+
+    void getHeal(int heal);
+
     void setAttack(int attack);
 
     int getHp() const;

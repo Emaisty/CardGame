@@ -24,13 +24,14 @@ void Game::round(Player &player, Player &opponent) {
         if (input == "attack") {
 
         } else if (input == "hand") {
-            if (!playCardFromHand(player)) {
-
+            if (!playCardFromHand(player, opponent)) {
+                printInformation(player, opponent);
+                std::cout << "Cannot play with that card" << std::endl;
             }
         } else {
 
         }
-
+        printInformation(player, opponent);
         std::cin >> input;
     }
     system("clear");
@@ -88,18 +89,58 @@ void Game::printPlayerHandInformation(Player &player) {
     }
 }
 
-bool Game::playCardFromHand(Player &player) {
+bool Game::playCardFromHand(Player &player, Player &opponent) {
     int size_of_cards = player.getPlayerCombatCards().size() + player.getPlayerSpellCards().size() +
                         player.getPlayerHeroesCards().size();
     int number_of_card = -1;
 
     std::cin >> number_of_card;
+    number_of_card--;
     if (number_of_card > size_of_cards) {
         return false;
     }
-    if (number_of_card < player.getPlayerCombatCards().size())
-        player.fromHandtoField(number_of_card + 1);
-    //TODO if spell card or hero card
+
+    if (number_of_card < player.getPlayerCombatCards().size()) {
+        player.fromHandtoField(number_of_card);
+        return true;
+    }
+    number_of_card -= player.getPlayerCombatCards().size();
+    if (number_of_card < player.getPlayerSpellCards().size()) {
+        Spell_card casted_card = player.getPlayerSpellCards()[number_of_card];
+        if (casted_card.getTypeOfClass() == Card::spell) {
+            if (casted_card.isTarget()) {
+                //TODO in normal way
+                int a;
+                std::cin >> a;
+                a--;
+                opponent.damageOnUnit(a, casted_card.getValue());
+            } else {
+                for (int i = 0; i < opponent.getPlayerFiled().size(); ++i) {
+                    opponent.damageOnUnit(i, casted_card.getValue());
+                    if (opponent.getPlayerFiled()[i].getHp() <= 0) {
+                        opponent.killUnit(i);
+                        --i;
+                    }
+                }
+            }
+            player.useSpellCard(number_of_card);
+        } else {
+            if (casted_card.isTarget()) {
+                int a;
+                std::cin >> a;
+                a--;
+                player.healOnUnit(a, casted_card.getValue());
+            } else {
+                for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
+                    player.healOnUnit(i, casted_card.getValue());
+                }
+            }
+            player.useSpellCard(number_of_card);
+        }
+        return true;
+    }
+    number_of_card -= player.getPlayerSpellCards().size();
+    player.useHeroCard(number_of_card);
     return true;
 }
 

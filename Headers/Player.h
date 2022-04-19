@@ -49,9 +49,15 @@ public:
 
     const std::vector<Spell_card> &getPlayerSpellCards() const;
 
+    void killUnit(int number_of_card);
+
     void fromHandtoField(int number_of_card);
 
-    void useSpell(int number_of_card);
+    void damageOnUnit(int number_of_card, int value);
+
+    void healOnUnit(int number_of_card, int value);
+
+    void useSpellCard(int number_of_card);
 
     void useHeroCard(int number_od_card);
 

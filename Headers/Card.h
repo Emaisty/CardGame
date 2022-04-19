@@ -14,6 +14,8 @@ public:
 
     void setName(const std::string &name);
 
+    void setTypeOfClass(class_of_card typeOfClass);
+
     const std::string &getName() const;
 
     class_of_card getTypeOfClass() const;
