@@ -37,11 +37,21 @@ void prepareForGame() {
     std::string Player1_name = input_name();
     Player player1(Player1_name, 30);
     Choose_deck(player1);
-
+    std::cout << "Please, set password: ";
+    //TODO rename var
+    std::string user_inp;
+    std::cin >> user_inp;
+    player1.setPassword(user_inp);
+    system("clear");
+    printMenuInformation();
     std::string Player2_name = input_name();
     Player player2(Player2_name, 30);
     Choose_deck(player2);
-
+    //TODO set password in func
+    std::cout << "Please, set password: ";
+    std::cin >> user_inp;
+    player2.setPassword(user_inp);
+    system("clear");
     Game game(player1, player2);
     game.run();
 }

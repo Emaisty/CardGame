@@ -25,6 +25,15 @@ void Player::setWeapon(int weapon) {
     Player::weapon = weapon;
 }
 
+void Player::setPassword(std::string new_password) {
+    password = std::hash<std::string>{}(new_password);
+}
+
+bool Player::checkPassword(std::string password) {
+    size_t users_password = std::hash<std::string>{}(password);
+    return this->password == users_password;
+}
+
 void Player::takeDamage(int damage) {
     Player::hp -= damage;
 }

@@ -16,7 +16,7 @@ void Game::run() {
 }
 
 void Game::round(Player &player, Player &opponent) {
-    checkingPassword();
+    checkingPassword(player);
     printInformation(player, opponent);
     std::string input;
     std::cin >> input;
@@ -26,7 +26,7 @@ void Game::round(Player &player, Player &opponent) {
         } else if (input == "hand") {
             if (!playCardFromHand(player, opponent)) {
                 printInformation(player, opponent);
-                std::cout << "Cannot play with that card" << std::endl;
+                std::cout << "Cannot play with that card or attack this target" << std::endl;
             }
         } else {
 
@@ -38,11 +38,11 @@ void Game::round(Player &player, Player &opponent) {
 }
 
 
-void Game::checkingPassword() {
+void Game::checkingPassword(Player &player) {
     std::string password;
     std::cout << "Enter password: ";
     std::cin >> password;
-    while (this->password != password) {
+    while (!player.checkPassword(password)) {
         system("clear");
         std::cout << "Wrong password. Please, give correct one:";
         std::cin >> password;
@@ -113,6 +113,8 @@ bool Game::playCardFromHand(Player &player, Player &opponent) {
                 int a;
                 std::cin >> a;
                 a--;
+                if (a < 0 || a >= opponent.getPlayerFiled().size())
+                    return false;
                 opponent.damageOnUnit(a, casted_card.getValue());
             } else {
                 for (int i = 0; i < opponent.getPlayerFiled().size(); ++i) {
@@ -122,6 +124,7 @@ bool Game::playCardFromHand(Player &player, Player &opponent) {
                         --i;
                     }
                 }
+                opponent.takeDamage(casted_card.getValue());
             }
             player.useSpellCard(number_of_card);
         } else {
@@ -129,6 +132,8 @@ bool Game::playCardFromHand(Player &player, Player &opponent) {
                 int a;
                 std::cin >> a;
                 a--;
+                if (a < 0 || a >= opponent.getPlayerFiled().size())
+                    return false;
                 player.healOnUnit(a, casted_card.getValue());
             } else {
                 for (int i = 0; i < player.getPlayerFiled().size(); ++i) {

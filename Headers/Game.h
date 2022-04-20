@@ -12,7 +12,7 @@ public:
 
     void round(Player &player, Player &opponent);
 
-    void checkingPassword();
+    void checkingPassword(Player &player);
 
     void printInformation(Player &player, Player &opponent);
 
@@ -29,7 +29,6 @@ public:
 protected:
     Player player1, player2;
     int which_turn = 1;
-    std::string password = "123";
 };
 
 #endif //CARDGAME_GAME_H

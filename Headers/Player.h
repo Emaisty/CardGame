@@ -23,6 +23,10 @@ public:
 
     void setWeapon(int weapon);
 
+    void setPassword(std::string new_password);
+
+    bool checkPassword(std::string password);
+
     int getHp() const;
 
     int getArmor() const;
@@ -69,6 +73,7 @@ public:
 protected:
     int hp, armor, weapon;
     std::string name;
+    size_t password;
     std::vector<Combat_card> player_combat_cards, player_filed;
     std::vector<Hero_buff_card> player_heroes_cards;
     std::vector<Spell_card> player_spell_cards;
