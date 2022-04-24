@@ -22,6 +22,8 @@ public:
 
     bool playCardFromHand(Player &player, Player &opponent);
 
+    static bool playCardFromField(Player &player, Player &opponent);
+
     const Player &getPlayer1() const;
 
     const Player &getPlayer2() const;

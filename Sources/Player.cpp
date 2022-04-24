@@ -46,7 +46,7 @@ const std::vector<Combat_card> &Player::getPlayerCombatCards() const {
     return player_combat_cards;
 }
 
-const std::vector<Combat_card> &Player::getPlayerFiled() const {
+std::vector<Combat_card> &Player::getPlayerFiled() {
     return player_filed;
 }
 

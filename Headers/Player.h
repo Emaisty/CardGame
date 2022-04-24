@@ -47,7 +47,7 @@ public:
 
     const std::vector<Combat_card> &getPlayerCombatCards() const;
 
-    const std::vector<Combat_card> &getPlayerFiled() const;
+    std::vector<Combat_card> &getPlayerFiled();
 
     const std::vector<Hero_buff_card> &getPlayerHeroesCards() const;
 
