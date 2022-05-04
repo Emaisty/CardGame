@@ -21,6 +21,10 @@ void Player::setArmor(int armor) {
     Player::armor = armor;
 }
 
+void Player::increaseArmor(int armor) {
+    Player::armor = armor;
+}
+
 void Player::setWeapon(int weapon) {
     Player::weapon = weapon;
 }
@@ -42,24 +46,19 @@ bool Player::ifPlayerAlive() {
     return hp > 0;
 }
 
-const std::vector<Combat_card> &Player::getPlayerCombatCards() const {
-    return player_combat_cards;
-}
-
 std::vector<Combat_card> &Player::getPlayerFiled() {
     return player_filed;
 }
 
-const std::vector<Hero_buff_card> &Player::getPlayerHeroesCards() const {
-    return player_heroes_cards;
-}
-
-const std::vector<Spell_card> &Player::getPlayerSpellCards() const {
-    return player_spell_cards;
+const std::vector<Card *> &Player::getPlayerCards() const {
+    return players_cards;
 }
 
 void Player::setPlayerCombatCards(const std::vector<Combat_card> &playerCombatCards) {
-    player_combat_cards = playerCombatCards;
+    for (int i = 0; i < playerCombatCards.size(); ++i) {
+        Card *new_card = playerCombatCards[i].clone();
+        players_cards.push_back(new_card);
+    }
 }
 
 void Player::setPlayerFiled(const std::vector<Combat_card> &playerFiled) {
@@ -67,11 +66,17 @@ void Player::setPlayerFiled(const std::vector<Combat_card> &playerFiled) {
 }
 
 void Player::setPlayerHeroesCards(const std::vector<Hero_buff_card> &playerHeroesCards) {
-    player_heroes_cards = playerHeroesCards;
+    for (int i = 0; i < playerHeroesCards.size(); ++i) {
+        Card *new_card = playerHeroesCards[i].clone();
+        players_cards.push_back(new_card);
+    }
 }
 
 void Player::setPlayerSpellCards(const std::vector<Spell_card> &playerSpellCards) {
-    player_spell_cards = playerSpellCards;
+    for (int i = 0; i < playerSpellCards.size(); ++i) {
+        Card *new_card = playerSpellCards[i].clone();
+        players_cards.push_back(new_card);
+    }
 }
 
 void Player::killUnit(int number_of_card) {
@@ -87,20 +92,25 @@ void Player::healOnUnit(int number_of_card, int value) {
 }
 
 void Player::fromHandtoField(int number_of_card) {
-    this->player_filed.push_back(this->player_combat_cards[number_of_card]);
-    this->player_combat_cards.erase(this->player_combat_cards.begin() + number_of_card);
+    Combat_card *new_field_card = dynamic_cast<Combat_card *>(players_cards[number_of_card]);
+    this->player_filed.push_back(*new_field_card);
+    delete players_cards[number_of_card];
+    this->players_cards.erase(this->players_cards.begin() + number_of_card);
 }
 
 void Player::useSpellCard(int number_of_card) {
-    this->player_spell_cards.erase(this->player_spell_cards.begin() + number_of_card);
+    delete this->players_cards[number_of_card];
+    this->players_cards.erase(this->players_cards.begin() + number_of_card);
 }
 
 void Player::useHeroCard(int number_od_card) {
-    if (this->player_heroes_cards[number_od_card].getTypeOfClass() == Card::class_of_card::armor)
-        this->armor += this->player_heroes_cards[number_od_card].getValue();
-    if (this->player_heroes_cards[number_od_card].getTypeOfClass() == Card::class_of_card::weapon)
-        setWeapon(this->player_heroes_cards[number_od_card].getValue());
-    this->player_heroes_cards.erase(this->player_heroes_cards.begin() + number_od_card);
+    Hero_buff_card *new_hero_card = dynamic_cast<Hero_buff_card *>(players_cards[number_od_card]);
+    if (new_hero_card->getTypeOfClass() == Card::class_of_card::armor)
+        increaseArmor(new_hero_card->getValue());
+    if (new_hero_card->getTypeOfClass() == Card::class_of_card::weapon)
+        setWeapon(new_hero_card->getValue());
+    delete this->players_cards[number_od_card];
+    this->players_cards.erase(this->players_cards.begin() + number_od_card);
 }
 
 void Player::setName(const std::string &name) {
@@ -113,3 +123,9 @@ const std::string &Player::getName() const {
 
 Player::Player(const std::string &name, int hp, int armor, int weapon) : name(name), hp(hp), armor(armor),
                                                                          weapon(weapon) {}
+
+Player::~Player() {
+    for (int i = 0; i < players_cards.size(); ++i)
+        delete players_cards[i];
+
+}

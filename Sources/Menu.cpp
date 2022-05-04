@@ -85,7 +85,6 @@ void mainPage() {
             case 3:
                 //TODO
                 return;
-                break;
             default:
                 std::cout << "invalid input.\n";
         }

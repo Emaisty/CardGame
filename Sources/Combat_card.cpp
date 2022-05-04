@@ -1,6 +1,10 @@
 #include "Combat_card.h"
 
-Combat_card::Combat_card(const std::string &name, int hp, int attack) : Card(name), hp(hp), attack(attack) {}
+Combat_card::Combat_card(const std::string &name, int hp, int attack) {
+    this->name = name;
+    this->hp = hp;
+    this->attack = attack;
+}
 
 int Combat_card::getHp() const {
     return hp;
@@ -14,7 +18,7 @@ void Combat_card::getHeal(int heal) {
     hp += heal;
 }
 
-int Combat_card::getAttack() const {
+int Combat_card::getValue() const {
     return attack;
 }
 
@@ -22,6 +26,10 @@ void Combat_card::setHp(int hp) {
     Combat_card::hp = hp;
 }
 
-void Combat_card::setAttack(int attack) {
+void Combat_card::setValue(int attack) {
     Combat_card::attack = attack;
+}
+
+Combat_card *Combat_card::clone() const {
+    return new Combat_card(*this);
 }

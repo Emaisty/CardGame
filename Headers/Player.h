@@ -17,9 +17,13 @@ class Player {
 public:
     Player(const std::string &name, int hp, int armor = 0, int weapon = 0);
 
+    ~Player();
+
     void setHp(int hp);
 
     void setArmor(int armor);
+
+    void increaseArmor(int armor);
 
     void setWeapon(int weapon);
 
@@ -37,21 +41,19 @@ public:
 
     bool ifPlayerAlive();
 
-    void setPlayerCombatCards(const std::vector<Combat_card> &playerCombatCards);
-
     void setPlayerFiled(const std::vector<Combat_card> &playerFiled);
+
+    void setPlayerCombatCards(const std::vector<Combat_card> &playerCombatCards);
 
     void setPlayerHeroesCards(const std::vector<Hero_buff_card> &playerHeroesCards);
 
     void setPlayerSpellCards(const std::vector<Spell_card> &playerSpellCards);
 
-    const std::vector<Combat_card> &getPlayerCombatCards() const;
+    void setPlayerCards(const std::vector<Card *> &playerSpellCards);
+
+    const std::vector<Card *> &getPlayerCards() const;
 
     std::vector<Combat_card> &getPlayerFiled();
-
-    const std::vector<Hero_buff_card> &getPlayerHeroesCards() const;
-
-    const std::vector<Spell_card> &getPlayerSpellCards() const;
 
     void killUnit(int number_of_card);
 
@@ -74,9 +76,8 @@ protected:
     int hp, armor, weapon;
     std::string name;
     size_t password;
-    std::vector<Combat_card> player_combat_cards, player_filed;
-    std::vector<Hero_buff_card> player_heroes_cards;
-    std::vector<Spell_card> player_spell_cards;
+    std::vector<Combat_card> player_filed;
+    std::vector<Card *> players_cards;
 };
 
 

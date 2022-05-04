@@ -7,6 +7,8 @@ const std::vector<CardDeck> &AllCardDecks::getAllCards() const {
 AllCardDecks::AllCardDecks() {
     CardDeck new_cardDeck;
     Combat_card combat1("Knight", 5, 5), combat2("Troop", 10, 2), combat3("King", 7, 7);
+    combat1.setTypeOfClass(Card::attacking);
+    combat2.setTypeOfClass(Card::attacking);
     Spell_card spell1("fireball", false, 5), spell2("heal", true, 4);
     spell1.setTypeOfClass(Card::spell);
     spell2.setTypeOfClass(Card::healing);

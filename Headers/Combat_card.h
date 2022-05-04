@@ -13,11 +13,14 @@ public:
 
     void getHeal(int heal);
 
-    void setAttack(int attack);
-
     int getHp() const;
 
-    int getAttack() const;
+    void setValue(int value) override;
+
+    //return attack
+    int getValue() const override;
+
+    Combat_card *clone() const override;
 
 protected:
     int hp;

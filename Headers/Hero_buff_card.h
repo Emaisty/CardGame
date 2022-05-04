@@ -7,9 +7,11 @@ class Hero_buff_card : public Card {
 public:
     Hero_buff_card(const std::string &name = "", int value = 0);
 
-    void setValue(int value);
+    void setValue(int value) override;
 
-    int getValue() const;
+    int getValue() const override;
+
+    Hero_buff_card *clone() const override;
 
 protected:
     int value;

@@ -6,19 +6,25 @@
 
 class Card {
 public:
+
+    virtual ~Card() {}
     enum class_of_card {
         defensive, attacking, healing, spell, weapon, armor
     };
-
-    Card(const std::string &name = "");
 
     void setName(const std::string &name);
 
     void setTypeOfClass(class_of_card typeOfClass);
 
-    const std::string &getName() const;
+    const std::string getName() const;
 
     class_of_card getTypeOfClass() const;
+
+    virtual void setValue(int value) = 0;
+
+    virtual int getValue() const = 0;
+
+    virtual Card *clone() const = 0;
 
 protected:
 

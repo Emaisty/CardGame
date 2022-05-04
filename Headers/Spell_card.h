@@ -9,11 +9,13 @@ public:
 
     void setTarget(bool target);
 
-    void setValue(int value);
+    void setValue(int value) override;
 
     bool isTarget() const;
 
-    int getValue() const;
+    int getValue() const override;
+
+    Spell_card *clone() const override;
 
 protected:
     bool target;

@@ -6,11 +6,11 @@
 
 class Game {
 public:
-    Game(Player player1, Player player2);
+    Game(Player &player1, Player &player2);
 
     void run();
 
-    void round(Player &player, Player &opponent);
+    bool round(Player &player, Player &opponent);
 
     void checkingPassword(Player &player);
 
@@ -20,9 +20,9 @@ public:
 
     void printPlayerInformation(Player &player);
 
-    bool playCardFromHand(Player &player, Player &opponent);
+    void playCardFromHand(Player &player, Player &opponent);
 
-    static bool playCardFromField(Player &player, Player &opponent);
+    static void playCardFromField(Player &player, Player &opponent);
 
     const Player &getPlayer1() const;
 
