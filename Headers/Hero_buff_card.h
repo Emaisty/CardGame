@@ -5,7 +5,7 @@
 
 class Hero_buff_card : public Card {
 public:
-    Hero_buff_card(const std::string &name = "", int value = 0);
+    Hero_buff_card(const std::string &name = "", int value = 0, int mana = 1);
 
     void setValue(int value) override;
 

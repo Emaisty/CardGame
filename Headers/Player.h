@@ -71,12 +71,24 @@ public:
 
     void setName(const std::string &name);
 
+    void setAllCardsPlayable();
+
+    const std::vector<bool> &getCanPlayCard() const;
+
+    void setCardNotPlayable(int number_of_card);
+
+    int getMana() const;
+
+    void decreaseMana(int value);
+
+    void prepareForRound();
 
 protected:
-    int hp, armor, weapon;
+    int hp, armor, weapon, current_mana = 1, mana = 1;
     std::string name;
     size_t password;
     std::vector<Combat_card> player_filed;
+    std::vector<bool> can_play_card;
     std::vector<Card *> players_cards;
 };
 

@@ -1,9 +1,10 @@
 #include "Combat_card.h"
 
-Combat_card::Combat_card(const std::string &name, int hp, int attack) {
+Combat_card::Combat_card(const std::string &name, int hp, int attack, int mana) {
     this->name = name;
     this->hp = hp;
     this->attack = attack;
+    this->mana = mana;
 }
 
 int Combat_card::getHp() const {

@@ -15,3 +15,7 @@ Card::class_of_card Card::getTypeOfClass() const {
 void Card::setTypeOfClass(Card::class_of_card typeOfClass) {
     type_of_class = typeOfClass;
 }
+
+int Card::getMana() const {
+    return mana;
+}

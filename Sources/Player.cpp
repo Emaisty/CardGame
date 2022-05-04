@@ -81,6 +81,7 @@ void Player::setPlayerSpellCards(const std::vector<Spell_card> &playerSpellCards
 
 void Player::killUnit(int number_of_card) {
     this->player_filed.erase(this->player_filed.begin() + number_of_card);
+    this->can_play_card.erase(this->can_play_card.begin() + number_of_card);
 }
 
 void Player::damageOnUnit(int number_of_card, int value) {
@@ -96,6 +97,7 @@ void Player::fromHandtoField(int number_of_card) {
     this->player_filed.push_back(*new_field_card);
     delete players_cards[number_of_card];
     this->players_cards.erase(this->players_cards.begin() + number_of_card);
+    this->can_play_card.push_back(false);
 }
 
 void Player::useSpellCard(int number_of_card) {
@@ -128,4 +130,31 @@ Player::~Player() {
     for (int i = 0; i < players_cards.size(); ++i)
         delete players_cards[i];
 
+}
+
+void Player::setAllCardsPlayable() {
+    for (int i = 0; i < can_play_card.size(); ++i)
+        can_play_card[i] = true;
+}
+
+const std::vector<bool> &Player::getCanPlayCard() const {
+    return can_play_card;
+}
+
+void Player::setCardNotPlayable(int number_of_card) {
+    can_play_card[number_of_card] = false;
+}
+
+int Player::getMana() const {
+    return current_mana;
+}
+
+void Player::decreaseMana(int value) {
+    current_mana -= value;
+}
+
+void Player::prepareForRound() {
+    mana++;
+    current_mana = mana;
+    this->setAllCardsPlayable();
 }

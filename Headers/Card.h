@@ -24,10 +24,12 @@ public:
 
     virtual int getValue() const = 0;
 
+    int getMana() const;
+
     virtual Card *clone() const = 0;
 
 protected:
-
+    int mana;
     std::string name;
     class_of_card type_of_class;
 };

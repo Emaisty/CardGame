@@ -5,7 +5,7 @@
 
 class Combat_card : public Card {
 public:
-    Combat_card(const std::string &name = "", int hp = 0, int attack = 0);
+    Combat_card(const std::string &name = "", int hp = 0, int attack = 0, int mana = 1);
 
     void setHp(int hp);
 

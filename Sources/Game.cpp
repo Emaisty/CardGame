@@ -17,9 +17,11 @@ void Game::run() {
         if (which_turn == 1) {
             if (!round(player1, player2)) return;
             which_turn = 2;
+            player1.prepareForRound();
         } else {
             if (!round(player2, player1)) return;
             which_turn = 1;
+            player2.prepareForRound();
         }
     }
 }
@@ -81,7 +83,7 @@ void Game::printInformation(Player &player, Player &opponent) {
 void Game::printPlayerInformation(Player &player) {
     std::cout << "Name: " << player.getName() << std::endl;
     std::cout << "Hp: " << player.getHp() << " | Armor: " << player.getArmor() << " | Weapon: "
-              << player.getWeapon() << std::endl;
+              << player.getWeapon() << "| Mana: " << player.getMana() << std::endl;
     std::cout << "========\n";
     for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
         std::cout << i + 1 << ") " << player.getPlayerFiled()[i].getName() << " ("
@@ -107,9 +109,12 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
     number_of_card--;
     if (number_of_card < 0 || number_of_card >= size_of_cards)
         throw std::invalid_argument("index out of range");
+    if (player.getMana() < player.getPlayerCards()[number_of_card]->getMana())
+        throw std::invalid_argument("not enough mana");
     //if card is playable
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() ==
         Card::attacking || player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::defensive) {
+        player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.fromHandtoField(number_of_card);
     }
     //if card is spell
@@ -130,6 +135,7 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
                 player.healOnUnit(i, spell->getValue());
             }
         }
+        player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.useSpellCard(number_of_card);
     }
     //if it is a spell
@@ -148,11 +154,13 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
                 opponent.damageOnUnit(i, spell->getValue());
             }
         }
+        player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.useSpellCard(number_of_card);
     }
     //if card is buff for hero
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() ==
         Card::armor || player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::weapon) {
+        player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.useHeroCard(number_of_card);
     }
 }
@@ -167,6 +175,10 @@ void Game::playCardFromField(Player &player, Player &opponent) {
         throw std::invalid_argument("out of range in opponents card");
     who_attack--;
     target--;
+    if (!player.getCanPlayCard()[who_attack]) {
+        throw std::invalid_argument("cannot play with this card right now");
+    }
+    player.setCardNotPlayable(who_attack);
     if (target != -1) {
         opponent.getPlayerFiled()[target].getDamage(player.getPlayerFiled()[who_attack].getValue());
         player.getPlayerFiled()[who_attack].getDamage(opponent.getPlayerFiled()[target].getValue());
@@ -174,6 +186,7 @@ void Game::playCardFromField(Player &player, Player &opponent) {
             opponent.killUnit(target);
         if (player.getPlayerFiled()[who_attack].getHp() <= 0)
             player.killUnit(who_attack);
+
     } else {
         opponent.takeDamage(player.getPlayerFiled()[who_attack].getValue());
         player.getPlayerFiled()[who_attack].getDamage(opponent.getWeapon());

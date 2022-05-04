@@ -1,9 +1,10 @@
 #include "Spell_card.h"
 
-Spell_card::Spell_card(const std::string &name, bool target, int value) {
+Spell_card::Spell_card(const std::string &name, bool target, int value, int mana) {
     this->name = name;
     this->target = target;
     this->value = value;
+    this->mana = mana;
 }
 
 bool Spell_card::isTarget() const {

@@ -1,8 +1,9 @@
 #include "Hero_buff_card.h"
 
-Hero_buff_card::Hero_buff_card(const std::string &name, int value) {
+Hero_buff_card::Hero_buff_card(const std::string &name, int value,int mana) {
     this->name = name;
     this->value = value;
+    this->mana = mana;
 }
 
 int Hero_buff_card::getValue() const {
