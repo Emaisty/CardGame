@@ -12,22 +12,8 @@ bool input_number(int &number) {
 
 Game::Game(Player &player1, Player &player2) : player1(player1), player2(player2) {}
 
-void Game::run() {
-    while (player1.ifPlayerAlive() && player2.ifPlayerAlive()) {
-        if (which_turn == 1) {
-            if (!round(player1, player2)) return;
-            which_turn = 2;
-            player1.prepareForRound();
-        } else {
-            if (!round(player2, player1)) return;
-            which_turn = 1;
-            player2.prepareForRound();
-        }
-    }
-}
-
-bool Game::round(Player &player, Player &opponent) {
-    checkingPassword(player);
+bool Game::humanRound(Player &player, Player &opponent) {
+    if (!opponent.isComputer()) checkingPassword(player);
     printInformation(player, opponent);
     std::string input;
     std::cin >> input;
@@ -48,6 +34,9 @@ bool Game::round(Player &player, Player &opponent) {
                 printInformation(player, opponent);
                 std::cout << "error: " << e.what() << ". Please input again" << std::endl;
             }
+        } else if (input == "save") {
+            saveTheGame(player, opponent);
+            return false;
         } else {
             printInformation(player, opponent);
             std::cout << "Error: unknown command" << std::endl;
@@ -55,6 +44,10 @@ bool Game::round(Player &player, Player &opponent) {
         std::cin >> input;
     }
     system("clear");
+    return true;
+}
+
+bool Game::computerRound(Player &player, Player &opponent) {
     return true;
 }
 
@@ -88,7 +81,10 @@ void Game::printPlayerInformation(Player &player) {
     for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
         std::cout << i + 1 << ") " << player.getPlayerFiled()[i].getName() << " ("
                   << player.getPlayerFiled()[i].getValue() << ") ("
-                  << player.getPlayerFiled()[i].getHp() << ")\n";
+                  << player.getPlayerFiled()[i].getHp() << ")";
+        if (player.getPlayerFiled()[i].getTypeOfClass() == Card::defensive)
+            std::cout << "   SHIELDED";
+        std::cout << "\n";
     }
     std::cout << "========\n";
 }
@@ -115,7 +111,8 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() ==
         Card::attacking || player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::defensive) {
         player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
-        player.fromHandtoField(number_of_card);
+        player.fromHandToField(number_of_card);
+        return;
     }
     //if card is spell
     //in the reason, what spell casting on opponent, realization of spell card is hear
@@ -137,6 +134,7 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
         }
         player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.useSpellCard(number_of_card);
+        return;
     }
     //if it is a spell
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::spell) {
@@ -156,12 +154,14 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
         }
         player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.useSpellCard(number_of_card);
+        return;
     }
     //if card is buff for hero
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() ==
         Card::armor || player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::weapon) {
         player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.useHeroCard(number_of_card);
+        return;
     }
 }
 
@@ -201,4 +201,41 @@ const Player &Game::getPlayer1() const {
 
 const Player &Game::getPlayer2() const {
     return player2;
+}
+
+void Game::saveTheGame(Player &player, Player &opponent) {
+    std::cout << "Input the name of file: ";
+    std::string name;
+    std::cin >> name;
+    for (const auto &entry: std::filesystem::directory_iterator("../Games"))
+        if (entry.path() == ("../Games/" + name))
+            throw "";
+    std::ofstream file;
+    file.open("../Games/" + name);
+    char *mas = new char[sizeof(int)];
+    memcpy(mas, &which_turn, sizeof(int));
+    file.write(mas, sizeof(int));
+    player.savePlayer(file);
+    opponent.savePlayer(file);
+    file.close();
+}
+
+void Game::run() {
+    player1.initGame();
+    player2.initGame();
+    while (player1.ifPlayerAlive() && player2.ifPlayerAlive()) {
+        if (which_turn == 1) {
+            if (!player1.isComputer())
+                if (!humanRound(player1, player2)) return;
+                else computerRound(player1, player2);
+            which_turn = 2;
+            player1.prepareForRound();
+        } else {
+            if (!player2.isComputer())
+                if (!humanRound(player2, player1)) return;
+                else computerRound(player2, player1);
+            which_turn = 1;
+            player2.prepareForRound();
+        }
+    }
 }

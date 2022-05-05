@@ -22,9 +22,10 @@ public:
 
     Combat_card *clone() const override;
 
+    void saveCard(std::ostream &) const override;
+
 protected:
-    int hp;
-    int attack;
+    int hp, attack;
 };
 
 #endif

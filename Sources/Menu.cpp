@@ -78,9 +78,13 @@ void mainPage() {
         switch (users_input) {
             case 1:
                 prepareForGame();
+                system("clear");
+                printMenuInformation();
                 break;
             case 2:
                 printCardDecks();
+                system("clear");
+                printMenuInformation();
                 break;
             case 3:
                 //TODO

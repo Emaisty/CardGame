@@ -2,12 +2,13 @@
 #define CARDGAME_CARD_H
 
 #include <iostream>
-
+#include <fstream>
 
 class Card {
 public:
 
     virtual ~Card() {}
+
     enum class_of_card {
         defensive, attacking, healing, spell, weapon, armor
     };
@@ -28,10 +29,15 @@ public:
 
     virtual Card *clone() const = 0;
 
+    virtual void saveCard(std::ostream &) const = 0;
+
+    void writeCardIntoFile(std::ostream &file) const;
+
 protected:
     int mana;
     std::string name;
     class_of_card type_of_class;
 };
+
 
 #endif

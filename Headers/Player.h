@@ -15,7 +15,7 @@
 
 class Player {
 public:
-    Player(const std::string &name, int hp, int armor = 0, int weapon = 0);
+    Player(const std::string &name, int hp, int armor = 0, int weapon = 0, bool is_computer = false);
 
     ~Player();
 
@@ -57,7 +57,7 @@ public:
 
     void killUnit(int number_of_card);
 
-    void fromHandtoField(int number_of_card);
+    void fromHandToField(int number_of_card);
 
     void damageOnUnit(int number_of_card, int value);
 
@@ -83,13 +83,25 @@ public:
 
     void prepareForRound();
 
+    bool isShieldOnField();
+
+    void initGame();
+
+    bool isComputer() const;
+
+    size_t getPassword() const;
+
+
+    void savePlayer(std::ostream &file) const;
+
 protected:
     int hp, armor, weapon, current_mana = 1, mana = 1;
     std::string name;
     size_t password;
+    bool is_computer;
     std::vector<Combat_card> player_filed;
     std::vector<bool> can_play_card;
-    std::vector<Card *> players_cards;
+    std::vector<Card *> players_cards, players_stack;
 };
 
 

@@ -34,3 +34,14 @@ void Combat_card::setValue(int attack) {
 Combat_card *Combat_card::clone() const {
     return new Combat_card(*this);
 }
+
+void Combat_card::saveCard(std::ostream &file) const {
+    writeCardIntoFile(file);
+    char *var = new char[sizeof(int)];
+    //write hp of card
+    memcpy(var, &hp, sizeof(int));
+    file.write(var, sizeof(int));
+    //write attack of card
+    memcpy(var, &attack, sizeof(int));
+    file.write(var, sizeof(int));
+}

@@ -2,7 +2,8 @@
 #define CARDGAME_GAME_H
 
 #include "Player.h"
-
+#include <filesystem>
+#include <fstream>
 
 class Game {
 public:
@@ -10,7 +11,9 @@ public:
 
     void run();
 
-    bool round(Player &player, Player &opponent);
+    bool humanRound(Player &player, Player &opponent);
+
+    bool computerRound(Player &player, Player &opponent);
 
     void checkingPassword(Player &player);
 
@@ -23,6 +26,8 @@ public:
     void playCardFromHand(Player &player, Player &opponent);
 
     static void playCardFromField(Player &player, Player &opponent);
+
+    void saveTheGame(Player &player, Player &opponent);
 
     const Player &getPlayer1() const;
 

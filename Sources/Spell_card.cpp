@@ -27,3 +27,15 @@ void Spell_card::setValue(int value) {
 Spell_card *Spell_card::clone() const {
     return new Spell_card(*this);
 }
+
+void Spell_card::saveCard(std::ostream &file) const {
+    writeCardIntoFile(file);
+    //write hp of card
+    char *is_target = new char[sizeof(bool)];
+    memcpy(is_target, &target, sizeof(bool));
+    file.write(is_target, sizeof(bool));
+    //write value of card
+    char *var = new char[sizeof(int)];
+    memcpy(var, &value, sizeof(int));
+    file.write(var, sizeof(int));
+}
