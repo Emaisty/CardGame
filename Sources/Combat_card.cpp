@@ -45,3 +45,21 @@ void Combat_card::saveCard(std::ostream &file) const {
     memcpy(var, &attack, sizeof(int));
     file.write(var, sizeof(int));
 }
+
+Combat_card *Combat_card::readCard(std::ifstream &file) {
+    this->name = readNameOfCard(file);
+    this->mana = readManaOfCard(file);
+    this->type_of_class = readType_of_classOfCard(file);
+    char *var = new char[sizeof(int)];
+    //read hp of card
+    int hp;
+    file.read(var, sizeof(int));
+    memcpy(&hp, var, sizeof(int));
+    //read attack of card
+    int attack;
+    file.read(var, sizeof(int));
+    memcpy(&attack, var, sizeof(int));
+    this->hp = hp;
+    this->attack = attack;
+    return this;
+}

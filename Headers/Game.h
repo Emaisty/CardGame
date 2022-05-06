@@ -7,7 +7,7 @@
 
 class Game {
 public:
-    Game(Player &player1, Player &player2);
+    Game();
 
     void run();
 
@@ -27,11 +27,17 @@ public:
 
     static void playCardFromField(Player &player, Player &opponent);
 
-    void saveTheGame(Player &player, Player &opponent);
+    void saveTheGame();
+
+    void loadTheGame();
 
     const Player &getPlayer1() const;
 
     const Player &getPlayer2() const;
+
+    void setPlayer1(const Player &player1);
+
+    void setPlayer2(const Player &player2);
 
 protected:
     Player player1, player2;

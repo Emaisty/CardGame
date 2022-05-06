@@ -10,7 +10,7 @@ bool input_number(int &number) {
 }
 
 
-Game::Game(Player &player1, Player &player2) : player1(player1), player2(player2) {}
+Game::Game() {}
 
 bool Game::humanRound(Player &player, Player &opponent) {
     if (!opponent.isComputer()) checkingPassword(player);
@@ -35,7 +35,7 @@ bool Game::humanRound(Player &player, Player &opponent) {
                 std::cout << "error: " << e.what() << ". Please input again" << std::endl;
             }
         } else if (input == "save") {
-            saveTheGame(player, opponent);
+            saveTheGame();
             return false;
         } else {
             printInformation(player, opponent);
@@ -203,7 +203,7 @@ const Player &Game::getPlayer2() const {
     return player2;
 }
 
-void Game::saveTheGame(Player &player, Player &opponent) {
+void Game::saveTheGame() {
     std::cout << "Input the name of file: ";
     std::string name;
     std::cin >> name;
@@ -215,14 +215,35 @@ void Game::saveTheGame(Player &player, Player &opponent) {
     char *mas = new char[sizeof(int)];
     memcpy(mas, &which_turn, sizeof(int));
     file.write(mas, sizeof(int));
-    player.savePlayer(file);
-    opponent.savePlayer(file);
+
+    player1.savePlayer(file);
+    player2.savePlayer(file);
     file.close();
 }
 
+void Game::loadTheGame() {
+    std::cout << "Input the name of file: ";
+    std::string name;
+    std::cin >> name;
+    for (const auto &entry: std::filesystem::directory_iterator("../Games"))
+        if (entry.path() == ("../Games/" + name)) {
+            std::ifstream file;
+            file.open("../Games/" + name);
+            char *mas = new char[sizeof(int)];
+            int turn;
+            file.read(mas, sizeof(int));
+            memcpy(&turn, mas, sizeof(int));
+            which_turn = turn;
+            player1.loadPlayer(file);
+            player2.loadPlayer(file);
+            file.close();
+            run();
+            return;
+        }
+    throw "";
+}
+
 void Game::run() {
-    player1.initGame();
-    player2.initGame();
     while (player1.ifPlayerAlive() && player2.ifPlayerAlive()) {
         if (which_turn == 1) {
             if (!player1.isComputer())
@@ -238,4 +259,12 @@ void Game::run() {
             player2.prepareForRound();
         }
     }
+}
+
+void Game::setPlayer1(const Player &player1) {
+    Game::player1 = player1;
+}
+
+void Game::setPlayer2(const Player &player2) {
+    Game::player2 = player2;
 }

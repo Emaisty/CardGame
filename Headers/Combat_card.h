@@ -22,7 +22,9 @@ public:
 
     Combat_card *clone() const override;
 
-    void saveCard(std::ostream &) const override;
+    void saveCard(std::ostream &file) const override;
+
+    Combat_card* readCard(std::ifstream &file) override;
 
 protected:
     int hp, attack;

@@ -25,11 +25,15 @@ public:
 
     virtual int getValue() const = 0;
 
+    void setMana(int mana);
+
     int getMana() const;
 
     virtual Card *clone() const = 0;
 
     virtual void saveCard(std::ostream &) const = 0;
+
+    virtual Card *readCard(std::ifstream &) = 0;
 
     void writeCardIntoFile(std::ostream &file) const;
 
@@ -39,5 +43,10 @@ protected:
     class_of_card type_of_class;
 };
 
+std::string readNameOfCard(std::ifstream &file);
+
+int readManaOfCard(std::ifstream &file);
+
+Card::class_of_card readType_of_classOfCard(std::ifstream &file);
 
 #endif

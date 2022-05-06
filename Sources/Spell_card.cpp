@@ -30,7 +30,7 @@ Spell_card *Spell_card::clone() const {
 
 void Spell_card::saveCard(std::ostream &file) const {
     writeCardIntoFile(file);
-    //write hp of card
+    //write is target card or not
     char *is_target = new char[sizeof(bool)];
     memcpy(is_target, &target, sizeof(bool));
     file.write(is_target, sizeof(bool));
@@ -38,4 +38,23 @@ void Spell_card::saveCard(std::ostream &file) const {
     char *var = new char[sizeof(int)];
     memcpy(var, &value, sizeof(int));
     file.write(var, sizeof(int));
+}
+
+Spell_card *Spell_card::readCard(std::ifstream &file) {
+    this->name = readNameOfCard(file);
+    this->mana = readManaOfCard(file);
+    this->type_of_class = readType_of_classOfCard(file);
+    char *var = new char[sizeof(int)];
+    //read is target card or not
+    char *tar = new char[sizeof(bool)];
+    bool is_target;
+    file.read(tar, sizeof(bool));
+    memcpy(&is_target, tar, sizeof(bool));
+    //read value of card
+    int value;
+    file.read(var, sizeof(int));
+    memcpy(&value, var, sizeof(int));
+    this->target = is_target;
+    this->value = value;
+    return this;
 }

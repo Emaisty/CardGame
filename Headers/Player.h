@@ -15,9 +15,11 @@
 
 class Player {
 public:
-    Player(const std::string &name, int hp, int armor = 0, int weapon = 0, bool is_computer = false);
+    Player(const std::string &name = "", int hp = 0, int armor = 0, int weapon = 0, bool is_computer = false);
 
     ~Player();
+
+    Player &operator=(Player const &player);
 
     void setHp(int hp);
 
@@ -49,7 +51,9 @@ public:
 
     void setPlayerSpellCards(const std::vector<Spell_card> &playerSpellCards);
 
-    void setPlayerCards(const std::vector<Card *> &playerSpellCards);
+    void setPlayerHandCards(const std::vector<Card *> &new_hand_cards);
+
+    void setPlayerStackCards(const std::vector<Card *> &new_stack_cards);
 
     const std::vector<Card *> &getPlayerCards() const;
 
@@ -91,8 +95,9 @@ public:
 
     size_t getPassword() const;
 
-
     void savePlayer(std::ostream &file) const;
+
+    void loadPlayer(std::ifstream &file);
 
 protected:
     int hp, armor, weapon, current_mana = 1, mana = 1;

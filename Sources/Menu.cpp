@@ -7,7 +7,8 @@ void printMenuInformation() {
     std::cout << "Choose what you want to do:\n";
     std::cout << "1) Start a game.\n";
     std::cout << "2) See all card decks\n";
-    std::cout << "3) exit the game (if you want exit in middle of a game, type 'exit_force')\n";
+    std::cout << "3) Load game from saves\n";
+    std::cout << "4) exit the game (if you want exit in middle of a game, type 'exit_force')\n";
     std::cout << "Input: ";
 }
 
@@ -60,8 +61,17 @@ void prepareForGame() {
     chooseDeck(player2);
     setPassword(player2);
 
-    Game game(player1, player2);
+    Game game;
+    player1.initGame();
+    player2.initGame();
+    game.setPlayer1(player1);
+    game.setPlayer2(player2);
     game.run();
+}
+
+void loadGame() {
+    Game game;
+    game.loadTheGame();
 }
 
 void printCardDecks() {
@@ -87,6 +97,11 @@ void mainPage() {
                 printMenuInformation();
                 break;
             case 3:
+                loadGame();
+                system("clear");
+                printMenuInformation();
+                break;
+            case 4:
                 //TODO
                 return;
             default:

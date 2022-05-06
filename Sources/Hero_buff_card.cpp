@@ -25,3 +25,16 @@ void Hero_buff_card::saveCard(std::ostream &file) const {
     memcpy(var, &value, sizeof(int));
     file.write(var, sizeof(int));
 }
+
+Hero_buff_card *Hero_buff_card::readCard(std::ifstream &file) {
+    this->name = readNameOfCard(file);
+    this->mana = readManaOfCard(file);
+    this->type_of_class = readType_of_classOfCard(file);
+    char *var = new char[sizeof(int)];
+    //read value of card
+    int value;
+    file.read(var, sizeof(int));
+    memcpy(&value, var, sizeof(int));
+    this->value = value;
+    return this;
+}

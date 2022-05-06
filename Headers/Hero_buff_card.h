@@ -13,7 +13,9 @@ public:
 
     Hero_buff_card *clone() const override;
 
-    void saveCard(std::ostream& file) const override;
+    void saveCard(std::ostream &file) const override;
+
+    Hero_buff_card *readCard(std::ifstream &file) override;
 
 protected:
     int value;
