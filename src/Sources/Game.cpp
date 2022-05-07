@@ -207,11 +207,13 @@ void Game::saveTheGame() {
     std::cout << "Input the name of file: ";
     std::string name;
     std::cin >> name;
-    for (const auto &entry: std::filesystem::directory_iterator("../Games"))
-        if (entry.path() == ("../Games/" + name))
+    for (const auto &entry: std::filesystem::directory_iterator("src/Games/")) {
+        std::cout << entry.path() << std::endl;
+        if (entry.path() == ("src/Games/" + name))
             throw "";
+    }
     std::ofstream file;
-    file.open("../Games/" + name);
+    file.open("src/Games/" + name);
     char *mas = new char[sizeof(int)];
     memcpy(mas, &which_turn, sizeof(int));
     file.write(mas, sizeof(int));
@@ -225,10 +227,10 @@ void Game::loadTheGame() {
     std::cout << "Input the name of file: ";
     std::string name;
     std::cin >> name;
-    for (const auto &entry: std::filesystem::directory_iterator("../Games"))
-        if (entry.path() == ("../Games/" + name)) {
+    for (const auto &entry: std::filesystem::directory_iterator("src/Games/"))
+        if (entry.path() == ("src/Games/" + name)) {
             std::ifstream file;
-            file.open("../Games/" + name);
+            file.open("src/Games/" + name);
             char *mas = new char[sizeof(int)];
             int turn;
             file.read(mas, sizeof(int));
