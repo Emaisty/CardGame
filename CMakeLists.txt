@@ -30,6 +30,6 @@ set(
         ${SOURCES}/Menu.cpp
         ${SOURCES}/CardDecks.cpp
 
-        src/main.cpp)
+        src/Sources/main.cpp)
 
 add_executable(CardGame ${SOURCE_FILES})
