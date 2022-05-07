@@ -1,0 +1,7 @@
+Task is to implement Card game.
+There are:
+-load definition of cards (types, attributes, effects,...), deck (list of cards in deck) from file
+-provide interface for creating a playing the game
+-implement following variants: player vs. computer (random moves are not sufficient)
+-player vs. player (blank confirmation window, opponent should not see our cards)
+-provides saving and loading running games
