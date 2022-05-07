@@ -55,6 +55,8 @@ void Card::writeCardIntoFile(std::ostream &file) const {
     char *type = new char[sizeof(Card::class_of_card)];
     memcpy(type, &type_of_class, sizeof(Card::class_of_card));
     file.write(type, sizeof(Card::class_of_card));
+    delete[] var;
+    delete[] type;
 }
 
 std::string readNameOfCard(std::ifstream &file) {
@@ -70,6 +72,7 @@ std::string readNameOfCard(std::ifstream &file) {
         memcpy(&letter, var, sizeof(int));
         new_name.push_back((char) letter);
     }
+    delete[] var;
     return new_name;
 }
 
@@ -78,6 +81,7 @@ int readManaOfCard(std::ifstream &file) {
     int mana;
     file.read(var, sizeof(int));
     memcpy(&mana, var, sizeof(int));
+    delete[] var;
     return mana;
 }
 
@@ -86,5 +90,6 @@ Card::class_of_card readType_of_classOfCard(std::ifstream &file) {
     char *class_of_card = new char[sizeof(Card::class_of_card)];
     file.read(class_of_card, sizeof(Card::class_of_card));
     memcpy(&class_of_new_card, class_of_card, sizeof(Card::class_of_card));
+    delete[] class_of_card;
     return class_of_new_card;
 }

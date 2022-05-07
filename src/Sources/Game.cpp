@@ -217,7 +217,7 @@ void Game::saveTheGame() {
     char *mas = new char[sizeof(int)];
     memcpy(mas, &which_turn, sizeof(int));
     file.write(mas, sizeof(int));
-
+    delete[] mas;
     player1.savePlayer(file);
     player2.savePlayer(file);
     file.close();
@@ -240,6 +240,7 @@ void Game::loadTheGame() {
             player2.loadPlayer(file);
             file.close();
             run();
+            delete[] mas;
             return;
         }
     throw "";

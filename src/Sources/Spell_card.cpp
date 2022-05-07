@@ -38,6 +38,8 @@ void Spell_card::saveCard(std::ostream &file) const {
     char *var = new char[sizeof(int)];
     memcpy(var, &value, sizeof(int));
     file.write(var, sizeof(int));
+    delete[] var;
+    delete[] is_target;
 }
 
 Spell_card *Spell_card::readCard(std::ifstream &file) {
@@ -56,5 +58,7 @@ Spell_card *Spell_card::readCard(std::ifstream &file) {
     memcpy(&value, var, sizeof(int));
     this->target = is_target;
     this->value = value;
+    delete[] var;
+    delete[] tar;
     return this;
 }

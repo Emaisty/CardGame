@@ -282,7 +282,9 @@ void Player::savePlayer(std::ostream &file) const {
     for (int i = 0; i < size_of_stack; ++i) {
         players_stack[i]->saveCard(file);
     }
-
+    delete[] var;
+    delete[] password_raw;
+    delete[] computer_player_or_not;
 }
 
 void Player::loadPlayer(std::ifstream &file) {
@@ -417,4 +419,7 @@ void Player::loadPlayer(std::ifstream &file) {
     for (int i = 0; i < new_players_stack.size(); ++i) {
         delete new_players_stack[i];
     }
+    delete[] var;
+    delete[] password_raw;
+    delete[] if_player_comp;
 }
