@@ -2,6 +2,7 @@
 #define CARDGAME_HERO_BUFF_H
 
 #include "Card.h"
+#include <cstring>
 
 class Hero_buff_card : public Card {
 public:

@@ -2,6 +2,7 @@
 #define CARDGAME_COMBER_CARD_H
 
 #include "Card.h"
+#include <cstring>
 
 class Combat_card : public Card {
 public:

@@ -3,9 +3,11 @@
 
 
 #include <vector>
+#include <cstring>
 #include "Combat_card.h"
 #include "Hero_buff_card.h"
 #include "Spell_card.h"
+
 
 /*struct set_of_cards {
     std::vector<Combat_card> player_comber_cards;

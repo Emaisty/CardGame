@@ -2,6 +2,7 @@
 #define CARDGAME_SPELL_CARD_H
 
 #include "Card.h"
+#include <cstring>
 
 class Spell_card : public Card {
 public:

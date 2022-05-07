@@ -4,6 +4,7 @@
 #include "Player.h"
 #include <filesystem>
 #include <fstream>
+#include <cstring>
 
 class Game {
 public:
