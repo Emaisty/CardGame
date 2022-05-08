@@ -28,7 +28,7 @@ Spell_card *Spell_card::clone() const {
     return new Spell_card(*this);
 }
 
-void Spell_card::saveCard(std::ostream &file) const {
+void Spell_card::writeCard(std::ostream &file) const {
     writeCardIntoFile(file);
     //write is target card or not
     char *is_target = new char[sizeof(bool)];
@@ -40,6 +40,22 @@ void Spell_card::saveCard(std::ostream &file) const {
     file.write(var, sizeof(int));
     delete[] var;
     delete[] is_target;
+}
+
+Spell_card *Spell_card::inputNewCard(std::istream &iss, std::ostream &oss) {
+    this->name = inputNameOfCard(iss, oss);
+    this->mana = inputManaOfCard(iss, oss);
+    oss << std::endl << "Type value of card: ";
+    int value;
+    if (!inputCorrectNumber(value, iss))
+        throw std::invalid_argument("invalid value input");
+    oss << std::endl << "Type is_targer of card:[1/0] ";
+    int is_targer;
+    if (!inputCorrectNumber(is_targer, iss))
+        throw std::invalid_argument("invalid is_targer input");
+    this->value = value;
+    this->target = is_targer;
+    return this;
 }
 
 Spell_card *Spell_card::readCard(std::ifstream &file) {
@@ -61,4 +77,9 @@ Spell_card *Spell_card::readCard(std::ifstream &file) {
     delete[] var;
     delete[] tar;
     return this;
+}
+
+void Spell_card::displayCard(std::ostream &oss) const {
+    this->displayMainCard(oss);
+    oss << "value: " << value << " is it target: " << target << std::endl;
 }

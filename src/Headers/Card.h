@@ -5,6 +5,8 @@
 #include <fstream>
 #include <cstring>
 
+bool inputCorrectNumber(int &number, std::istream &iss);
+
 class Card {
 public:
 
@@ -32,11 +34,17 @@ public:
 
     virtual Card *clone() const = 0;
 
-    virtual void saveCard(std::ostream &) const = 0;
+    virtual void writeCard(std::ostream &) const = 0;
 
     virtual Card *readCard(std::ifstream &) = 0;
 
+    virtual void displayCard(std::ostream &) const = 0;
+
+    virtual Card *inputNewCard(std::istream &, std::ostream &) = 0;
+
     void writeCardIntoFile(std::ostream &file) const;
+
+    void displayMainCard(std::ostream &oss) const;
 
 protected:
     int mana;
@@ -49,5 +57,9 @@ std::string readNameOfCard(std::ifstream &file);
 int readManaOfCard(std::ifstream &file);
 
 Card::class_of_card readType_of_classOfCard(std::ifstream &file);
+
+std::string inputNameOfCard(std::istream &iss, std::ostream &oss);
+
+int inputManaOfCard(std::istream &iss, std::ostream &oss);
 
 #endif

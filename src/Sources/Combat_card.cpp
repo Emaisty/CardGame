@@ -35,7 +35,7 @@ Combat_card *Combat_card::clone() const {
     return new Combat_card(*this);
 }
 
-void Combat_card::saveCard(std::ostream &file) const {
+void Combat_card::writeCard(std::ostream &file) const {
     writeCardIntoFile(file);
     char *var = new char[sizeof(int)];
     //write hp of card
@@ -45,6 +45,22 @@ void Combat_card::saveCard(std::ostream &file) const {
     memcpy(var, &attack, sizeof(int));
     file.write(var, sizeof(int));
     delete[] var;
+}
+
+Combat_card *Combat_card::inputNewCard(std::istream &iss, std::ostream &oss) {
+    this->name = inputNameOfCard(iss, oss);
+    this->mana = inputManaOfCard(iss, oss);
+    oss << std::endl << "Type hp of card: ";
+    int hp;
+    if (!inputCorrectNumber(hp, iss))
+        throw std::invalid_argument("invalid hp input");
+    oss << std::endl << "Type attack of card: ";
+    int attack;
+    if (!inputCorrectNumber(attack, iss))
+        throw std::invalid_argument("invalid attack input");
+    this->hp = hp;
+    this->attack = attack;
+    return this;
 }
 
 Combat_card *Combat_card::readCard(std::ifstream &file) {
@@ -64,4 +80,9 @@ Combat_card *Combat_card::readCard(std::ifstream &file) {
     this->attack = attack;
     delete[] var;
     return this;
+}
+
+void Combat_card::displayCard(std::ostream &oss) const {
+    this->displayMainCard(oss);
+    oss << "hp: " << hp << " | attack: " << attack << std::endl;
 }

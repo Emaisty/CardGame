@@ -1,5 +1,14 @@
 #include "Card.h"
 
+bool inputCorrectNumber(int &number, std::istream &iss) {
+    std::string user_input;
+    iss >> user_input;
+    try {
+        number = stoi(user_input);
+    } catch (const std::invalid_argument &) { return false; } catch (const std::out_of_range &) { return false; }
+    return true;
+}
+
 void Card::setName(const std::string &name) {
     Card::name = name;
 }
@@ -59,6 +68,31 @@ void Card::writeCardIntoFile(std::ostream &file) const {
     delete[] type;
 }
 
+void Card::displayMainCard(std::ostream &oss) const {
+    oss << name << " | ";
+    switch (type_of_class) {
+        case Card::attacking:
+            oss << "attack | ";
+            break;
+        case Card::defensive:
+            oss << "def | ";
+            break;
+        case Card::healing:
+            oss << "heal | ";
+            break;
+        case Card::spell:
+            oss << "spell | ";
+            break;
+        case Card::armor:
+            oss << "armor | ";
+            break;
+        case Card::weapon:
+            oss << "weapon | ";
+            break;
+    }
+    oss << mana << " | ";
+};
+
 std::string readNameOfCard(std::ifstream &file) {
     char *var = new char[sizeof(int)];
     //read name
@@ -92,4 +126,19 @@ Card::class_of_card readType_of_classOfCard(std::ifstream &file) {
     memcpy(&class_of_new_card, class_of_card, sizeof(Card::class_of_card));
     delete[] class_of_card;
     return class_of_new_card;
+}
+
+std::string inputNameOfCard(std::istream &iss, std::ostream &oss) {
+    oss << "Type name of card: ";
+    std::string new_name;
+    iss >> new_name;
+    return new_name;
+}
+
+int inputManaOfCard(std::istream &iss, std::ostream &oss) {
+    oss << std::endl << "Type mana cost of card: ";
+    int mana;
+    if (!inputCorrectNumber(mana, iss))
+        throw std::invalid_argument("invalid mana input");
+    return mana;
 }

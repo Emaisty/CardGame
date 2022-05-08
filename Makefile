@@ -1,4 +1,4 @@
-TARGET = CardGame
+TARGET = gusevmak
 
 SRCS  = $(shell find ./src/Sources -type f -name *.cpp)
 HEADS = $(shell find ./src/Headers -type f -name *.h)
@@ -25,5 +25,7 @@ depend:
 
 clean:
 	$(RM) $(OBJS) $(TARGET)
+
+compile : $(TARGET) $(OBJS) $(HEADS)
 
 -include $(DEPS)

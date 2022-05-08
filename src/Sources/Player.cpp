@@ -262,7 +262,7 @@ void Player::savePlayer(std::ostream &file) const {
     file.write(var, sizeof(int));
 
     for (int i = 0; i < size_of_field; ++i) {
-        player_filed[i].saveCard(file);
+        player_filed[i].writeCard(file);
     }
 
     //save player hand
@@ -271,7 +271,7 @@ void Player::savePlayer(std::ostream &file) const {
     file.write(var, sizeof(int));
 
     for (int i = 0; i < size_of_hand; ++i) {
-        players_cards[i]->saveCard(file);
+        players_cards[i]->writeCard(file);
     }
 
     //save player stack
@@ -280,7 +280,7 @@ void Player::savePlayer(std::ostream &file) const {
     file.write(var, sizeof(int));
 
     for (int i = 0; i < size_of_stack; ++i) {
-        players_stack[i]->saveCard(file);
+        players_stack[i]->writeCard(file);
     }
     delete[] var;
     delete[] password_raw;

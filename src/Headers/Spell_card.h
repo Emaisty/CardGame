@@ -18,9 +18,13 @@ public:
 
     Spell_card *clone() const override;
 
-    void saveCard(std::ostream &file) const override;
+    void writeCard(std::ostream &file) const override;
 
-    Spell_card* readCard(std::ifstream &file) override;
+    Spell_card *readCard(std::ifstream &file) override;
+
+    Spell_card* inputNewCard(std::istream &iss, std::ostream &oss) override;
+
+    void displayCard(std::ostream &oss) const override;
 
 protected:
     bool target;

@@ -35,8 +35,13 @@ bool Game::humanRound(Player &player, Player &opponent) {
                 std::cout << "error: " << e.what() << ". Please input again" << std::endl;
             }
         } else if (input == "save") {
-            saveTheGame();
-            return false;
+            try {
+                saveTheGame();
+                return false;
+            } catch (std::invalid_argument &e) {
+                printInformation(player, opponent);
+                std::cout << "Cannot open file: " << e.what();
+            }
         } else {
             printInformation(player, opponent);
             std::cout << "Error: unknown command" << std::endl;
@@ -207,43 +212,59 @@ void Game::saveTheGame() {
     std::cout << "Input the name of file: ";
     std::string name;
     std::cin >> name;
+    if (!std::filesystem::is_directory("src/Games/") || !std::filesystem::exists("src/Games/")) {
+        std::filesystem::create_directory("src/Games/");
+    }
     for (const auto &entry: std::filesystem::directory_iterator("src/Games/")) {
-        std::cout << entry.path() << std::endl;
-        if (entry.path() == ("src/Games/" + name))
-            throw "";
+        if (entry.path() == ("src/Games/" + name)) {
+            std::cout << "warning. File already exist. Do you want to rewrite it?: [Y]/n: ";
+            std::string answer;
+            std::cin >> answer;
+            if (answer == "Y" || answer == "y" || answer == "yes" || answer == "Yes") {
+                break;
+            } else {
+                return;
+            }
+        }
     }
     std::ofstream file;
     file.open("src/Games/" + name);
-    char *mas = new char[sizeof(int)];
-    memcpy(mas, &which_turn, sizeof(int));
-    file.write(mas, sizeof(int));
-    delete[] mas;
+    if (!file) {
+        throw std::invalid_argument(name);
+    }
+    char *var = new char[sizeof(int)];
+    memcpy(var, &which_turn, sizeof(int));
+    file.write(var, sizeof(int));
+    delete[] var;
     player1.savePlayer(file);
     player2.savePlayer(file);
     file.close();
 }
 
 void Game::loadTheGame() {
+    if (!std::filesystem::is_directory("src/Games/") || !std::filesystem::exists("src/Games/")) {
+        throw std::invalid_argument("src/Games/");
+    }
+    std::cout << "List of games:" << std::endl;
+    for (const auto &entry: std::filesystem::directory_iterator("src/Games/"))
+        std::cout << entry.path() << std::endl;
     std::cout << "Input the name of file: ";
     std::string name;
     std::cin >> name;
-    for (const auto &entry: std::filesystem::directory_iterator("src/Games/"))
-        if (entry.path() == ("src/Games/" + name)) {
-            std::ifstream file;
-            file.open("src/Games/" + name);
-            char *mas = new char[sizeof(int)];
-            int turn;
-            file.read(mas, sizeof(int));
-            memcpy(&turn, mas, sizeof(int));
-            which_turn = turn;
-            player1.loadPlayer(file);
-            player2.loadPlayer(file);
-            file.close();
-            run();
-            delete[] mas;
-            return;
-        }
-    throw "";
+    std::ifstream file;
+    file.open("src/Games/" + name);
+    if (file) {
+        char *var = new char[sizeof(int)];
+        int turn;
+        file.read(var, sizeof(int));
+        memcpy(&turn, var, sizeof(int));
+        which_turn = turn;
+        player1.loadPlayer(file);
+        player2.loadPlayer(file);
+        file.close();
+        run();
+        delete[] var;
+    } else throw std::invalid_argument(name);
 }
 
 void Game::run() {
