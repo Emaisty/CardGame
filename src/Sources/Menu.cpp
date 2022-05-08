@@ -18,25 +18,14 @@ std::string inputName() {
 }
 
 void chooseDeck(Player &player) {
-    AllCardDecks allDecks;
+    All_decks all_decks;
     std::cout << "Choose your deck (list of decks can be seen in main menu): ";
-    std::string user_input;
     int user_choose_deck = -1;
-    std::cin >> user_input;
-    try {
-        user_choose_deck = stoi(user_input);
-    } catch (const std::invalid_argument &) {} catch (const std::out_of_range &) {}
-    while (user_choose_deck < 0 || user_choose_deck >= allDecks.getAllCards().size()) {
-        system("clear");
-        std::cout << "Invalid input. Please choose right deck: ";
-        std::cin >> user_input;
-        try {
-            user_choose_deck = stoi(user_input);
-        } catch (const std::invalid_argument &) {} catch (const std::out_of_range &) {}
+    if (!inputCorrectNumber(user_choose_deck, std::cin) || user_choose_deck < 1 ||
+        user_choose_deck > all_decks.getSize()) {
+        throw user_choose_deck;
     }
-    player.setPlayerCombatCards(allDecks.getAllCards()[user_choose_deck].getCombatCards());
-    player.setPlayerSpellCards(allDecks.getAllCards()[user_choose_deck].getSpellCards());
-    player.setPlayerHeroesCards(allDecks.getAllCards()[user_choose_deck].getHeroCards());
+    player.setPlayerStackCards(all_decks.getDeck(--user_choose_deck));
 }
 
 void setPassword(Player &player) {
@@ -56,16 +45,26 @@ void prepareForGameWithComputer() {
 }
 
 void prepareForGame() {
+    system("clear");
     std::string Player1_name = inputName();
     Player player1(Player1_name, 30);
-    chooseDeck(player1);
+    try {
+        chooseDeck(player1);
+    } catch (int &e) {
+        throw std::invalid_argument("Wrong number of deck" + std::to_string(e));
+    }
     setPassword(player1);
 
     system("clear");
     std::string Player2_name = inputName();
     Player player2(Player2_name, 30);
-    chooseDeck(player2);
+    try {
+        chooseDeck(player2);
+    } catch (int &e) {
+        throw std::invalid_argument("Wrong number of deck" + std::to_string(e));
+    }
     setPassword(player2);
+
     system("clear");
     Game game;
     player1.initGame();
@@ -99,14 +98,26 @@ void mainPage() {
         printMenuInformation();
         switch (users_input) {
             case 1:
-                prepareForGame();
-                system("clear");
-                printMenuInformation();
+                try {
+                    prepareForGame();
+                    system("clear");
+                    printMenuInformation();
+                } catch (std::invalid_argument &e) {
+                    system("clear");
+                    printMenuInformation();
+                    std::cout << e.what() << std::endl;
+                }
                 break;
             case 2:
-                prepareForGameWithComputer();
-                system("clear");
-                printMenuInformation();
+                try {
+                    prepareForGameWithComputer();
+                    system("clear");
+                    printMenuInformation();
+                } catch (std::invalid_argument &e) {
+                    system("clear");
+                    printMenuInformation();
+                    std::cout << e.what() << std::endl;
+                }
                 break;
             case 3:
                 printCardDecks();

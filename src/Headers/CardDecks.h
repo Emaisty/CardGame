@@ -24,6 +24,8 @@ public:
 
     Card *getCard(int number_of_card);
 
+    size_t getSize();
+
 private:
     std::vector<Card *> cards;
 };
@@ -40,41 +42,11 @@ public:
 
     std::vector<Card *> getDeck(int number_of_deck);
 
+    size_t getSize();
+
 private:
     All_cards cards;
     std::vector<std::vector<int>> decks;
-};
-
-
-class CardDeck {
-public:
-    const std::vector<Combat_card> &getCombatCards() const;
-
-    const std::vector<Spell_card> &getSpellCards() const;
-
-    const std::vector<Hero_buff_card> &getHeroCards() const;
-
-    void setCombatCards(const std::vector<Combat_card> &combatCards);
-
-    void setSpellCards(const std::vector<Spell_card> &spellCards);
-
-    void setHeroCards(const std::vector<Hero_buff_card> &heroCards);
-
-private:
-    std::vector<Combat_card> Combat_cards;
-    std::vector<Spell_card> Spell_cards;
-    std::vector<Hero_buff_card> Hero_cards;
-};
-
-class AllCardDecks {
-public:
-    AllCardDecks();
-
-public:
-    const std::vector<CardDeck> &getAllCards() const;
-
-private:
-    std::vector<CardDeck> allCards;
 };
 
 #endif //CARDGAME_CARDDECKS_H
