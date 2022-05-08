@@ -26,5 +26,15 @@ save - save game to a file
 
 end - end your turn.
 
-## Description
+## Shema
 
+![shema of classes](shema.png)
+solid lines - inheritance
+dashed lines - use 
+
+Combat cards, Spell cards, Hero buff cards inherited from Card\
+\
+Player use Combat cards and Card (pointer on them, in which pointer saved Combat cards, Spell cards or Hero buff cards)
+Game uses Player class
+
+Card deck use pointer on Card to store all Cards (in pointers saved Combat cards, Spell cards or Hero buff cards)
