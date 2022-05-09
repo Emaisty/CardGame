@@ -16,10 +16,6 @@ public:
 
     Player &operator=(Player const &player);
 
-    void setHp(int hp);
-
-    void setArmor(int armor);
-
     void increaseArmor(int armor);
 
     void setWeapon(int weapon);
@@ -39,12 +35,6 @@ public:
     bool ifPlayerAlive();
 
     void setPlayerFiled(const std::vector<Combat_card> &playerFiled);
-
-    void setPlayerCombatCards(const std::vector<Combat_card> &playerCombatCards);
-
-    void setPlayerHeroesCards(const std::vector<Hero_buff_card> &playerHeroesCards);
-
-    void setPlayerSpellCards(const std::vector<Spell_card> &playerSpellCards);
 
     void setPlayerHandCards(const std::vector<Card *> &new_hand_cards);
 
@@ -82,16 +72,14 @@ public:
 
     void prepareForRound();
 
-    bool isShieldOnField();
-
     void initGame();
 
     bool isComputer() const;
 
-    size_t getPassword() const;
-
+    //write inf about player into file
     void savePlayer(std::ostream &file) const;
 
+    //read inf about player from file
     void loadPlayer(std::ifstream &file);
 
     void setIsComputer(bool isComputer);

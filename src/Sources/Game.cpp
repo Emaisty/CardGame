@@ -1,15 +1,7 @@
 #include "Game.h"
 
-bool input_number(int &number) {
-    std::string user_input;
-    std::cin >> user_input;
-    try {
-        number = stoi(user_input);
-    } catch (const std::invalid_argument &) { return false; } catch (const std::out_of_range &) { return false; }
-    return true;
-}
-
 bool Game::humanRound(Player &player, Player &opponent) {
+    //if opponent computer - not need to check password
     if (!opponent.isComputer()) checkingPassword(player);
     printInformation(player, opponent);
     std::string input;
@@ -18,9 +10,10 @@ bool Game::humanRound(Player &player, Player &opponent) {
         if (input == "attack") {
             try {
                 int who_attack = -1, target = -1;
-                if (!input_number(who_attack) || who_attack < 1 && who_attack > player.getPlayerFiled().size())
+                if (!inputCorrectNumber(who_attack, std::cin) ||
+                    who_attack < 1 && who_attack > player.getPlayerFiled().size())
                     throw std::invalid_argument("invalid input of your card");
-                if (!input_number(target) || target < 0 && target > opponent.getPlayerFiled().size())
+                if (!inputCorrectNumber(target, std::cin) || target < 0 && target > opponent.getPlayerFiled().size())
                     throw std::invalid_argument("invalid input of target");
                 who_attack--;
                 target--;
@@ -34,7 +27,8 @@ bool Game::humanRound(Player &player, Player &opponent) {
             try {
                 int size_of_cards = player.getPlayerCards().size();
                 int number_of_card = -1;
-                if (!input_number(number_of_card) || number_of_card < 0 || number_of_card > size_of_cards)
+                if (!inputCorrectNumber(number_of_card, std::cin) || number_of_card < 0 ||
+                    number_of_card > size_of_cards)
                     throw std::invalid_argument("invalid input of card");
                 number_of_card--;
                 playCardFromHand(player, opponent, number_of_card);
@@ -187,7 +181,8 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
                 }
             } else {
                 std::cout << "Choose target: ";
-                if (!input_number(target) || target == -1) throw std::invalid_argument("invalid input of target");
+                if (!inputCorrectNumber(target, std::cin) || target == -1)
+                    throw std::invalid_argument("invalid input of target");
                 target--;
             }
             if (target < 0 || target >= player.getPlayerFiled().size())
@@ -208,6 +203,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
         if (spell->isTarget()) {
             int target = -1;
             if (player.isComputer()) {
+                //if computer - choose opponent card with the lowest hp
                 if (opponent.getPlayerFiled().size() == 0) {
                     opponent.takeDamage(spell->getValue());
                     player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
@@ -221,8 +217,10 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
                     }
                 }
             } else {
+                //human can choose target
                 std::cout << "Choose target: ";
-                if (!input_number(target) || target == -1) throw std::invalid_argument("invalid input of target");
+                if (!inputCorrectNumber(target, std::cin) || target == -1)
+                    throw std::invalid_argument("invalid input of target");
                 target--;
             }
             if (target < 0 || target >= opponent.getPlayerFiled().size())
@@ -237,6 +235,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
                     opponent.killUnit(i);
             }
         }
+        //player uses card
         player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
         player.useSpellCard(number_of_card);
         return;
@@ -255,15 +254,17 @@ void Game::playCardFromField(Player &player, Player &opponent, int who_attack, i
         throw std::invalid_argument("cannot play with this card right now");
     }
     player.setCardNotPlayable(who_attack);
+
     if (target != -1) {
+        //if target not opponent
         opponent.getPlayerFiled()[target].getDamage(player.getPlayerFiled()[who_attack].getValue());
         player.getPlayerFiled()[who_attack].getDamage(opponent.getPlayerFiled()[target].getValue());
         if (opponent.getPlayerFiled()[target].getHp() <= 0)
             opponent.killUnit(target);
         if (player.getPlayerFiled()[who_attack].getHp() <= 0)
             player.killUnit(who_attack);
-
     } else {
+        //if target is opponent
         opponent.takeDamage(player.getPlayerFiled()[who_attack].getValue());
         player.getPlayerFiled()[who_attack].getDamage(opponent.getWeapon());
         if (player.getPlayerFiled()[who_attack].getHp() <= 0)
@@ -286,6 +287,7 @@ void Game::saveTheGame() {
     if (!std::filesystem::is_directory("src/Games/") || !std::filesystem::exists("src/Games/")) {
         std::filesystem::create_directory("src/Games/");
     }
+    //rewrite already existed file
     for (const auto &entry: std::filesystem::directory_iterator("src/Games/")) {
         if (entry.path() == ("src/Games/" + name)) {
             std::cout << "warning. File already exist. Do you want to rewrite it?: [Y]/n: ";
@@ -339,6 +341,7 @@ void Game::loadTheGame() {
 }
 
 void Game::run() {
+    //while players alive
     while (player1.ifPlayerAlive() && player2.ifPlayerAlive()) {
         if (which_turn == 1) {
             if (!player1.isComputer()) {

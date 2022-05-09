@@ -14,8 +14,10 @@ void cardMenu();
 
 class All_cards {
 public:
+    //load from file all cards
     All_cards();
 
+    //write to file all cards
     ~All_cards();
 
     bool createNewCard();
@@ -32,8 +34,10 @@ private:
 
 class All_decks {
 public:
+    //load from file all decks
     All_decks();
 
+    //write to file all decks
     ~All_decks();
 
     void createNewDeck();

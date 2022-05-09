@@ -14,10 +14,13 @@ public:
 
     Hero_buff_card *clone() const override;
 
+    //write card to file
     void writeCard(std::ostream &file) const override;
 
+    //read inf about card from file
     Hero_buff_card *readCard(std::ifstream &file) override;
 
+    //users input of new card
     Hero_buff_card *inputNewCard(std::istream &iss, std::ostream &oss) override;
 
     void displayCard(std::ostream &oss) const override;

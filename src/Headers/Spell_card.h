@@ -18,11 +18,14 @@ public:
 
     Spell_card *clone() const override;
 
+    //write card to file
     void writeCard(std::ostream &file) const override;
 
+    //read inf about card from file
     Spell_card *readCard(std::ifstream &file) override;
 
-    Spell_card* inputNewCard(std::istream &iss, std::ostream &oss) override;
+    //users input of new card
+    Spell_card *inputNewCard(std::istream &iss, std::ostream &oss) override;
 
     void displayCard(std::ostream &oss) const override;
 

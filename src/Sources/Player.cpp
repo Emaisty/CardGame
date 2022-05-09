@@ -41,14 +41,6 @@ int Player::getWeapon() const {
     return weapon;
 }
 
-void Player::setHp(int hp) {
-    Player::hp = hp;
-}
-
-void Player::setArmor(int armor) {
-    Player::armor = armor;
-}
-
 void Player::increaseArmor(int armor) {
     Player::armor = armor;
 }
@@ -82,29 +74,8 @@ const std::vector<Card *> &Player::getPlayerCards() const {
     return players_cards;
 }
 
-void Player::setPlayerCombatCards(const std::vector<Combat_card> &playerCombatCards) {
-    for (int i = 0; i < playerCombatCards.size(); ++i) {
-        Card *new_card = playerCombatCards[i].clone();
-        players_stack.push_back(new_card);
-    }
-}
-
 void Player::setPlayerFiled(const std::vector<Combat_card> &playerFiled) {
     player_filed = playerFiled;
-}
-
-void Player::setPlayerHeroesCards(const std::vector<Hero_buff_card> &playerHeroesCards) {
-    for (int i = 0; i < playerHeroesCards.size(); ++i) {
-        Card *new_card = playerHeroesCards[i].clone();
-        players_stack.push_back(new_card);
-    }
-}
-
-void Player::setPlayerSpellCards(const std::vector<Spell_card> &playerSpellCards) {
-    for (int i = 0; i < playerSpellCards.size(); ++i) {
-        Card *new_card = playerSpellCards[i].clone();
-        players_stack.push_back(new_card);
-    }
 }
 
 void Player::setPlayerHandCards(const std::vector<Card *> &new_hand_cards) {
@@ -200,12 +171,6 @@ bool Player::isComputer() const {
     return is_computer;
 }
 
-bool Player::isShieldOnField() {
-    for (auto &i: player_filed)
-        if (i.getTypeOfClass() == Card::defensive) return true;
-    return false;
-}
-
 void Player::initGame() {
     for (int i = 0; i < 3; ++i) {
         srand((unsigned int) time(NULL));
@@ -215,10 +180,6 @@ void Player::initGame() {
         delete players_stack[random_card];
         players_stack.erase(players_stack.begin() + random_card);
     }
-}
-
-size_t Player::getPassword() const {
-    return password;
 }
 
 void Player::savePlayer(std::ostream &file) const {

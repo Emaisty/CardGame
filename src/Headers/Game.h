@@ -8,14 +8,18 @@
 
 class Game {
 public:
+    //run the game
     void run();
 
+    //if player human
     bool humanRound(Player &player, Player &opponent);
 
+    //if player is computer
     bool computerRound(Player &player, Player &opponent);
 
     void checkingPassword(Player &player);
 
+    //display game
     void printInformation(Player &player, Player &opponent);
 
     void printPlayerHandInformation(Player &player);
