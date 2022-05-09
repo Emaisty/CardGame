@@ -9,9 +9,6 @@ bool input_number(int &number) {
     return true;
 }
 
-
-Game::Game() {}
-
 bool Game::humanRound(Player &player, Player &opponent) {
     if (!opponent.isComputer()) checkingPassword(player);
     printInformation(player, opponent);
@@ -20,7 +17,14 @@ bool Game::humanRound(Player &player, Player &opponent) {
     while (input != "end") {
         if (input == "attack") {
             try {
-                playCardFromField(player, opponent);
+                int who_attack = -1, target = -1;
+                if (!input_number(who_attack) || who_attack < 1 && who_attack > player.getPlayerFiled().size())
+                    throw std::invalid_argument("invalid input of your card");
+                if (!input_number(target) || target < 0 && target > opponent.getPlayerFiled().size())
+                    throw std::invalid_argument("invalid input of target");
+                who_attack--;
+                target--;
+                playCardFromField(player, opponent, who_attack, target);
                 printInformation(player, opponent);
             } catch (std::invalid_argument &e) {
                 printInformation(player, opponent);
@@ -28,7 +32,12 @@ bool Game::humanRound(Player &player, Player &opponent) {
             }
         } else if (input == "hand") {
             try {
-                playCardFromHand(player, opponent);
+                int size_of_cards = player.getPlayerCards().size();
+                int number_of_card = -1;
+                if (!input_number(number_of_card) || number_of_card < 0 || number_of_card > size_of_cards)
+                    throw std::invalid_argument("invalid input of card");
+                number_of_card--;
+                playCardFromHand(player, opponent, number_of_card);
                 printInformation(player, opponent);
             } catch (std::invalid_argument &e) {
                 printInformation(player, opponent);
@@ -52,7 +61,55 @@ bool Game::humanRound(Player &player, Player &opponent) {
     return true;
 }
 
+//computer moves
 bool Game::computerRound(Player &player, Player &opponent) {
+    //play cards from field
+    if (player.getPlayerFiled().size() > 1) {
+        int who_attack_hero = 0;
+        //card with most value attack hero, others - attack cards if can
+        for (int i = 1; i < player.getPlayerFiled().size(); ++i) {
+            if (player.getPlayerFiled()[i].getValue() > player.getPlayerFiled()[who_attack_hero].getValue())
+                who_attack_hero = i;
+        }
+        playCardFromField(player, opponent, who_attack_hero, -1);
+        for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
+            if (player.getCanPlayCard()[i]) {
+                // attack opp filed cards
+                if (opponent.getPlayerFiled().size() != 0) {
+                    int target = 0;
+                    for (int j = 1; j < opponent.getPlayerFiled().size(); ++j) {
+                        if (opponent.getPlayerFiled()[j].getHp() > opponent.getPlayerFiled()[target].getHp())
+                            target = j;
+                    }
+                    playCardFromField(player, opponent, i, target);
+                } else {
+                    //if there is no card on opp field - attack hero
+                    playCardFromField(player, opponent, i, -1);
+                }
+            }
+        }
+    } else {
+        // if have got 0 or 1 - attack opponent hero
+        for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
+            if (player.getCanPlayCard()[i])
+                playCardFromField(player, opponent, i, -1);
+        }
+    }
+    //play from hand
+    int card_from_hand = 0;
+    //find most costable card
+    for (int i = 1; i < player.getPlayerCards().size(); ++i) {
+        if (player.getPlayerCards()[i]->getMana() > player.getPlayerCards()[card_from_hand]->getMana() &&
+            player.getPlayerCards()[i]->getMana() <= player.getMana())
+            card_from_hand = i;
+    }
+    //try to move from hand to filed, if enough mana
+    if (player.getPlayerCards()[card_from_hand]->getMana() <= player.getMana())
+        playCardFromHand(player, opponent, card_from_hand);
+    for (int i = 0; i < player.getPlayerCards().size(); ++i) {
+        if (player.getPlayerCards()[i]->getMana() <= player.getMana())
+            playCardFromHand(player, opponent, i);
+    }
     return true;
 }
 
@@ -101,15 +158,7 @@ void Game::printPlayerHandInformation(Player &player) {
     }
 }
 
-void Game::playCardFromHand(Player &player, Player &opponent) {
-    int size_of_cards = player.getPlayerCards().size();
-    int number_of_card = -1;
-
-    if (!input_number(number_of_card))
-        throw std::invalid_argument("invalid input of card");
-    number_of_card--;
-    if (number_of_card < 0 || number_of_card >= size_of_cards)
-        throw std::invalid_argument("index out of range");
+void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card) {
     if (player.getMana() < player.getPlayerCards()[number_of_card]->getMana())
         throw std::invalid_argument("not enough mana");
     //if card is playable
@@ -125,10 +174,22 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::healing) {
         Spell_card *spell = dynamic_cast<Spell_card *>(player.getPlayerCards()[number_of_card]);
         if (spell->isTarget()) {
-            std::cout << "Choose target: ";
             int target = -1;
-            if (!input_number(target)) throw std::invalid_argument("invalid input of target");
-            target--;
+            if (player.isComputer()) {
+                if (player.getPlayerFiled().size() == 0) {
+                    return;
+                } else {
+                    target = 0;
+                    for (int i = 1; i < player.getPlayerFiled().size(); ++i) {
+                        if (player.getPlayerFiled()[i].getHp() < player.getPlayerFiled()[target].getHp())
+                            target = i;
+                    }
+                }
+            } else {
+                std::cout << "Choose target: ";
+                if (!input_number(target) || target == -1) throw std::invalid_argument("invalid input of target");
+                target--;
+            }
             if (target < 0 || target >= player.getPlayerFiled().size())
                 throw std::invalid_argument("target index out of range");
             player.healOnUnit(target, spell->getValue());
@@ -145,16 +206,35 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::spell) {
         Spell_card *spell = dynamic_cast<Spell_card *>(player.getPlayerCards()[number_of_card]);
         if (spell->isTarget()) {
-            std::cout << "Choose target: ";
             int target = -1;
-            if (!input_number(target) || target == -1) throw std::invalid_argument("invalid input of target");
-            target--;
+            if (player.isComputer()) {
+                if (opponent.getPlayerFiled().size() == 0) {
+                    opponent.takeDamage(spell->getValue());
+                    player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
+                    player.useSpellCard(number_of_card);
+                    return;
+                } else {
+                    target = 0;
+                    for (int i = 1; i < opponent.getPlayerFiled().size(); ++i) {
+                        if (opponent.getPlayerFiled()[i].getHp() < opponent.getPlayerFiled()[target].getHp())
+                            target = i;
+                    }
+                }
+            } else {
+                std::cout << "Choose target: ";
+                if (!input_number(target) || target == -1) throw std::invalid_argument("invalid input of target");
+                target--;
+            }
             if (target < 0 || target >= opponent.getPlayerFiled().size())
                 throw std::invalid_argument("target index out of range");
             opponent.damageOnUnit(target, spell->getValue());
+            if (opponent.getPlayerFiled()[target].getHp() <= 0)
+                opponent.killUnit(target);
         } else {
             for (int i = 0; i < opponent.getPlayerFiled().size(); ++i) {
                 opponent.damageOnUnit(i, spell->getValue());
+                if (opponent.getPlayerFiled()[i].getHp() <= 0)
+                    opponent.killUnit(i);
             }
         }
         player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
@@ -170,16 +250,7 @@ void Game::playCardFromHand(Player &player, Player &opponent) {
     }
 }
 
-void Game::playCardFromField(Player &player, Player &opponent) {
-    int who_attack = -1, target = -1;
-    if (!input_number(who_attack)) throw std::invalid_argument("invalid input of your card");
-    if (!input_number(target)) throw std::invalid_argument("invalid input of target");
-    if (who_attack < 1 && who_attack >= player.getPlayerFiled().size())
-        throw std::invalid_argument("out of range in yours card");
-    if (target < 0 && target >= opponent.getPlayerFiled().size())
-        throw std::invalid_argument("out of range in opponents card");
-    who_attack--;
-    target--;
+void Game::playCardFromField(Player &player, Player &opponent, int who_attack, int target) {
     if (!player.getCanPlayCard()[who_attack]) {
         throw std::invalid_argument("cannot play with this card right now");
     }
@@ -270,15 +341,15 @@ void Game::loadTheGame() {
 void Game::run() {
     while (player1.ifPlayerAlive() && player2.ifPlayerAlive()) {
         if (which_turn == 1) {
-            if (!player1.isComputer())
+            if (!player1.isComputer()) {
                 if (!humanRound(player1, player2)) return;
-                else computerRound(player1, player2);
+            } else computerRound(player1, player2);
             which_turn = 2;
             player1.prepareForRound();
         } else {
-            if (!player2.isComputer())
+            if (!player2.isComputer()) {
                 if (!humanRound(player2, player1)) return;
-                else computerRound(player2, player1);
+            } else computerRound(player2, player1);
             which_turn = 1;
             player2.prepareForRound();
         }

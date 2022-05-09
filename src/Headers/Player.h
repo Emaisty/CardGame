@@ -8,13 +8,6 @@
 #include "Hero_buff_card.h"
 #include "Spell_card.h"
 
-
-/*struct set_of_cards {
-    std::vector<Combat_card> player_comber_cards;
-    std::vector<Hero_buff_card> player_heroes_cards;
-    std::vector<Spell_card> player_spell_cards;
-};*/
-
 class Player {
 public:
     Player(const std::string &name = "", int hp = 0, int armor = 0, int weapon = 0, bool is_computer = false);
@@ -100,6 +93,8 @@ public:
     void savePlayer(std::ostream &file) const;
 
     void loadPlayer(std::ifstream &file);
+
+    void setIsComputer(bool isComputer);
 
 protected:
     int hp, armor, weapon, current_mana = 1, mana = 1;

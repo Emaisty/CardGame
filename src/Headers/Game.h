@@ -8,8 +8,6 @@
 
 class Game {
 public:
-    Game();
-
     void run();
 
     bool humanRound(Player &player, Player &opponent);
@@ -24,9 +22,9 @@ public:
 
     void printPlayerInformation(Player &player);
 
-    void playCardFromHand(Player &player, Player &opponent);
+    void playCardFromHand(Player &player, Player &opponent, int number_of_card);
 
-    static void playCardFromField(Player &player, Player &opponent);
+    static void playCardFromField(Player &player, Player &opponent, int who_attack, int target);
 
     void saveTheGame();
 

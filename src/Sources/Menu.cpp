@@ -36,12 +36,29 @@ void setPassword(Player &player) {
 }
 
 void prepareForGameWithComputer() {
+    system("clear");
     std::string Player1_name = inputName();
     Player player1(Player1_name, 30);
-    chooseDeck(player1);
-    setPassword(player1);
+    try {
+        chooseDeck(player1);
+    } catch (int &e) {
+        throw std::invalid_argument("Wrong number of deck" + std::to_string(e));
+    }
 
     system("clear");
+
+    All_decks all_decks;
+    srand((unsigned int) time(NULL));
+    int random_deck = rand() % all_decks.getSize();
+    Player player2("Computer", 30);
+    player2.setPlayerStackCards(all_decks.getDeck(random_deck));
+    player2.setIsComputer(true);
+    Game game;
+    player1.initGame();
+    player2.initGame();
+    game.setPlayer1(player1);
+    game.setPlayer2(player2);
+    game.run();
 }
 
 void prepareForGame() {

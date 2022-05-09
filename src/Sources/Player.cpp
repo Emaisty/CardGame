@@ -423,3 +423,7 @@ void Player::loadPlayer(std::ifstream &file) {
     delete[] password_raw;
     delete[] if_player_comp;
 }
+
+void Player::setIsComputer(bool isComputer) {
+    is_computer = isComputer;
+}
