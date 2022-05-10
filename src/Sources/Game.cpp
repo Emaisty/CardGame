@@ -364,6 +364,17 @@ void Game::run() {
             player2.prepareForRound();
         }
     }
+    int check = system("clear");
+    if (check == -1)
+        return;
+    std::cout << "Winner :";
+    if (player1.ifPlayerAlive())
+        std::cout << player1.getName() << std::endl;
+    else
+        std::cout << player2.getName() << std::endl;
+    std::cout << std::endl << "To exit, input any char" << std::endl;
+    char c;
+    std::cin >> c;
 }
 
 void Game::setPlayer1(const Player &player1) {
