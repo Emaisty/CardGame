@@ -137,7 +137,7 @@ All_cards::~All_cards() {
     int size_of_cards = cards.size();
     memcpy(var, &size_of_cards, sizeof(int));
     file.write(var, sizeof(int));
-    for (long unsigned int i = 0; i < size_of_cards; ++i) {
+    for (int i = 0; i < size_of_cards; ++i) {
         cards[i]->writeCard(file);
     }
     for (auto &card: cards) {

@@ -256,7 +256,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, long unsigned int 
     }
 }
 
-void Game::playCardFromField(Player &player, Player &opponent, long unsigned int who_attack, long unsigned int target) {
+void Game::playCardFromField(Player &player, Player &opponent, long unsigned int who_attack, int target) {
     if (!player.getCanPlayCard()[who_attack]) {
         throw std::invalid_argument("cannot play with this card right now");
     }
