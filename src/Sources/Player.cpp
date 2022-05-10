@@ -6,9 +6,9 @@ Player::Player(const std::string &name, int hp, int armor, int weapon, bool is_c
                                                                                            is_computer(is_computer) {}
 
 Player::~Player() {
-    for (auto & players_card : players_cards)
+    for (auto &players_card: players_cards)
         delete players_card;
-    for (auto & i : players_stack)
+    for (auto &i: players_stack)
         delete i;
 }
 
@@ -79,12 +79,12 @@ void Player::setPlayerFiled(const std::vector<Combat_card> &playerFiled) {
 }
 
 void Player::setPlayerHandCards(const std::vector<Card *> &new_hand_cards) {
-    for (auto new_hand_card : new_hand_cards)
+    for (auto new_hand_card: new_hand_cards)
         players_cards.push_back(new_hand_card->clone());
 }
 
 void Player::setPlayerStackCards(const std::vector<Card *> &new_stack_cards) {
-    for (auto new_stack_card : new_stack_cards)
+    for (auto new_stack_card: new_stack_cards)
         players_stack.push_back(new_stack_card->clone());
 }
 
@@ -134,7 +134,7 @@ const std::string &Player::getName() const {
 
 
 void Player::setAllCardsPlayable() {
-    for (auto && i : can_play_card)
+    for (auto &&i: can_play_card)
         i = true;
 }
 
@@ -190,7 +190,7 @@ void Player::savePlayer(std::ostream &file) const {
     file.write(var, sizeof(int));
 
     //save name of player
-    for (int i = 0; i < size_of_name; ++i) {
+    for (long unsigned int i = 0; i < size_of_name; ++i) {
         int letter = (int) name[i];
         memcpy(var, &letter, sizeof(int));
         file.write(var, sizeof(int));
@@ -374,10 +374,10 @@ void Player::loadPlayer(std::ifstream &file) {
     setPlayerFiled(new_players_filed);
     setPlayerHandCards(new_players_hand);
     setPlayerStackCards(new_players_stack);
-    for (auto & i : new_players_hand) {
+    for (auto &i: new_players_hand) {
         delete i;
     }
-    for (auto & i : new_players_stack) {
+    for (auto &i: new_players_stack) {
         delete i;
     }
     delete[] var;

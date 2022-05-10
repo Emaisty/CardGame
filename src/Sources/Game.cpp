@@ -53,7 +53,9 @@ bool Game::humanRound(Player &player, Player &opponent) {
         }
         std::cin >> input;
     }
-    system("clear");
+    int check = system("clear");
+    if (check == -1)
+        return false;
     return true;
 }
 
@@ -114,14 +116,18 @@ void Game::checkingPassword(Player &player) {
     std::cout << "Enter password: ";
     std::cin >> password;
     while (!player.checkPassword(password)) {
-        system("clear");
+        int check = system("clear");
+        if (check == -1)
+            return;
         std::cout << "Wrong password. Please, give correct one:";
         std::cin >> password;
     }
 }
 
 void Game::printInformation(Player &player, Player &opponent) {
-    system("clear");
+    int check = system("clear");
+    if (check == -1)
+        return;
     printPlayerInformation(opponent);
     std::cout << "\n\n";
     std::cout << "==========================================================================================";
@@ -183,12 +189,10 @@ void Game::playCardFromHand(Player &player, Player &opponent, long unsigned int 
                 }
             } else {
                 std::cout << "Choose target: ";
-                if (!inputCorrectNumber(target, std::cin) || target == -1)
+                if (!inputCorrectNumber(target, std::cin) || target < 0 || target >= player.getPlayerFiled().size())
                     throw std::invalid_argument("invalid input of target");
                 target--;
             }
-            if (target < 0 || target >= player.getPlayerFiled().size())
-                throw std::invalid_argument("target index out of range");
             player.healOnUnit(target, spell->getValue());
         } else {
             for (long unsigned int i = 0; i < player.getPlayerFiled().size(); ++i) {

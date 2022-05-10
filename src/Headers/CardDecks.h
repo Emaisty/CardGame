@@ -26,7 +26,7 @@ public:
 
     Card *getCard(int number_of_card);
 
-    size_t getSize();
+    long unsigned int getSize();
 
 private:
     std::vector<Card *> cards;
@@ -46,7 +46,7 @@ public:
 
     std::vector<Card *> getDeck(int number_of_deck);
 
-    size_t getSize();
+    long unsigned int getSize();
 
 private:
     All_cards cards;

@@ -36,7 +36,9 @@ void setPassword(Player &player) {
 }
 
 void prepareForGameWithComputer() {
-    system("clear");
+    int check = system("clear");
+    if (check == -1)
+        return;
     std::string Player1_name = inputName();
     Player player1(Player1_name, 30);
     try {
@@ -45,7 +47,9 @@ void prepareForGameWithComputer() {
         throw std::invalid_argument("Wrong number of deck" + std::to_string(e));
     }
 
-    system("clear");
+    check = system("clear");
+    if (check == -1)
+        return;
 
     All_decks all_decks;
     srand((unsigned int) time(NULL));
@@ -62,7 +66,9 @@ void prepareForGameWithComputer() {
 }
 
 void prepareForGame() {
-    system("clear");
+    int check = system("clear");
+    if (check == -1)
+        return;
     std::string Player1_name = inputName();
     Player player1(Player1_name, 30);
     try {
@@ -72,7 +78,9 @@ void prepareForGame() {
     }
     setPassword(player1);
 
-    system("clear");
+    check = system("clear");
+    if (check == -1)
+        return;
     std::string Player2_name = inputName();
     Player player2(Player2_name, 30);
     try {
@@ -82,7 +90,9 @@ void prepareForGame() {
     }
     setPassword(player2);
 
-    system("clear");
+    check = system("clear");
+    if (check == -1)
+        return;
     Game game;
     player1.initGame();
     player2.initGame();
@@ -101,53 +111,76 @@ void printCardDecks() {
 };
 
 void mainPage() {
-    system("clear");
+    int check = system("clear");
+    if (check == -1)
+        return;
     printMenuInformation();
     int users_input;
     while (true) {
         if (!inputCorrectNumber(users_input, std::cin) || users_input < 1 || users_input > 5) {
-            system("clear");
+            int check = system("clear");
+            if (check == -1)
+                return;
             printMenuInformation();
             std::cout << "Error: invalid input. Please, write correct number" << std::endl;
             continue;
         }
-        system("clear");
+        int check = system("clear");
+        if (check == -1)
+            return;
         printMenuInformation();
         switch (users_input) {
-            case 1:
+            case 1: {
                 try {
                     prepareForGame();
-                    system("clear");
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
                     printMenuInformation();
                 } catch (std::invalid_argument &e) {
-                    system("clear");
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
                     printMenuInformation();
                     std::cout << e.what() << std::endl;
                 }
                 break;
-            case 2:
+            }
+            case 2: {
                 try {
                     prepareForGameWithComputer();
-                    system("clear");
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
                     printMenuInformation();
                 } catch (std::invalid_argument &e) {
-                    system("clear");
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
                     printMenuInformation();
                     std::cout << e.what() << std::endl;
                 }
                 break;
-            case 3:
+            }
+            case 3: {
                 printCardDecks();
-                system("clear");
+                int check = system("clear");
+                if (check == -1)
+                    return;
                 printMenuInformation();
                 break;
-            case 4:
+            }
+            case 4: {
                 try {
                     loadGame();
-                    system("clear");
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
                     printMenuInformation();
                 } catch (std::invalid_argument &e) {
-                    system("clear");
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
                     printMenuInformation();
                     if (strcmp(e.what(), "src/Games/") == 0) {
                         std::cout << "You havent saved any game before" << std::endl;
@@ -156,6 +189,7 @@ void mainPage() {
                     }
                 }
                 break;
+            }
             case 5:
                 return;
             default:
