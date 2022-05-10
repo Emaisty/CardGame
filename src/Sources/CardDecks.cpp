@@ -19,23 +19,23 @@ void cardMenu() {
     while (true) {
         if (!inputCorrectNumber(users_input, std::cin) || users_input < 1 || users_input > 5) {
             int check = system("clear");
-    if (check == -1)
-        return;
+            if (check == -1)
+                return;
             printMenuCardInformation();
             std::cout << "Error: invalid input. Please, write correct number" << std::endl;
             continue;
         }
         int check = system("clear");
-    if (check == -1)
-        return;
+        if (check == -1)
+            return;
         printMenuCardInformation();
         switch (users_input) {
             case 1: {
                 All_cards cards_to_display;
                 cards_to_display.displayCards();
                 int check = system("clear");
-    if (check == -1)
-        return;
+                if (check == -1)
+                    return;
                 printMenuCardInformation();
                 break;
             }
@@ -43,8 +43,8 @@ void cardMenu() {
                 All_decks deck_to_display;
                 deck_to_display.displayDecks();
                 int check = system("clear");
-    if (check == -1)
-        return;
+                if (check == -1)
+                    return;
                 printMenuCardInformation();
                 break;
             }
@@ -53,13 +53,13 @@ void cardMenu() {
                 try {
                     cards_for_update.createNewCard();
                     int check = system("clear");
-    if (check == -1)
-        return;
+                    if (check == -1)
+                        return;
                     printMenuCardInformation();
                 } catch (std::invalid_argument &e) {
                     int check = system("clear");
-    if (check == -1)
-        return;
+                    if (check == -1)
+                        return;
                     printMenuCardInformation();
                     std::cout << "error. cannot create new card. " << e.what() << std::endl;
                 }
@@ -70,13 +70,13 @@ void cardMenu() {
                 try {
                     decks_for_update.createNewDeck();
                     int check = system("clear");
-    if (check == -1)
-        return;
+                    if (check == -1)
+                        return;
                     printMenuCardInformation();
                 } catch (int &e) {
                     int check = system("clear");
-    if (check == -1)
-        return;
+                    if (check == -1)
+                        return;
                     printMenuCardInformation();
                     std::cout << "error. cannot create new deck. Wrong number at " << e << " card." << std::endl;
                 }
@@ -210,7 +210,7 @@ void All_cards::displayCards() {
         return;
     std::cout << "List of cards:" << std::endl;
     std::cout << "Name | type | mana |..." << std::endl;
-    for (int i = 0; i < cards.size(); ++i) {
+    for (long unsigned int i = 0; i < cards.size(); ++i) {
         std::cout << i + 1 << ") ";
         cards[i]->displayCard(std::cout);
     }
@@ -272,10 +272,12 @@ void All_decks::createNewDeck() {
     std::cout << "Input 30 number from 1 to " << cards.getSize() << ": " << std::endl;
     std::vector<int> new_deck;
     for (int i = 0; i < 30; ++i) {
-        int new_card;
+        long unsigned int new_card;
         if (!inputCorrectNumber(new_card, std::cin) || new_card < 1 || new_card > cards.getSize())
             throw i;
-        new_deck.push_back(--new_card);
+        int number_of_new_card;
+        number_of_new_card = (int) new_card;
+        new_deck.push_back(--number_of_new_card);
     }
     decks.push_back(new_deck);
 }

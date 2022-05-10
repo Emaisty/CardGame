@@ -20,12 +20,13 @@ std::string inputName() {
 void chooseDeck(Player &player) {
     All_decks all_decks;
     std::cout << "Choose your deck (list of decks can be seen in main menu): ";
-    int user_choose_deck = -1;
+    unsigned long int user_choose_deck = -1;
     if (!inputCorrectNumber(user_choose_deck, std::cin) || user_choose_deck < 1 ||
         user_choose_deck > all_decks.getSize()) {
         throw user_choose_deck;
     }
-    player.setPlayerStackCards(all_decks.getDeck(--user_choose_deck));
+    int user_new_choose_deck = (int) user_choose_deck;
+    player.setPlayerStackCards(all_decks.getDeck(--user_new_choose_deck));
 }
 
 void setPassword(Player &player) {

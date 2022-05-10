@@ -176,7 +176,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, long unsigned int 
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::healing) {
         Spell_card *spell = dynamic_cast<Spell_card *>(player.getPlayerCards()[number_of_card]);
         if (spell->isTarget()) {
-            int target = -1;
+            long unsigned int target = -1;
             if (player.isComputer()) {
                 if (player.getPlayerFiled().size() == 0) {
                     return;
@@ -193,7 +193,8 @@ void Game::playCardFromHand(Player &player, Player &opponent, long unsigned int 
                     throw std::invalid_argument("invalid input of target");
                 target--;
             }
-            player.healOnUnit(target, spell->getValue());
+            int new_target = (int) target;
+            player.healOnUnit(new_target, spell->getValue());
         } else {
             for (long unsigned int i = 0; i < player.getPlayerFiled().size(); ++i) {
                 player.healOnUnit(i, spell->getValue());
@@ -225,7 +226,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, long unsigned int 
             } else {
                 //human can choose target
                 std::cout << "Choose target: ";
-                if (!inputCorrectNumber(target, std::cin) || target == -1)
+                if (!inputCorrectNumber(target, std::cin))
                     throw std::invalid_argument("invalid input of target");
                 target--;
             }
