@@ -31,27 +31,9 @@ void cardMenu() {
         printMenuCardInformation();
         switch (users_input) {
             case 1: {
-                All_cards cards_to_display;
-                cards_to_display.displayCards();
-                int check = system("clear");
-                if (check == -1)
-                    return;
-                printMenuCardInformation();
-                break;
-            }
-            case 2: {
-                All_decks deck_to_display;
-                deck_to_display.displayDecks();
-                int check = system("clear");
-                if (check == -1)
-                    return;
-                printMenuCardInformation();
-                break;
-            }
-            case 3: {
-                All_cards cards_for_update;
                 try {
-                    cards_for_update.createNewCard();
+                    All_cards cards_to_display;
+                    cards_to_display.displayCards();
                     int check = system("clear");
                     if (check == -1)
                         return;
@@ -61,24 +43,75 @@ void cardMenu() {
                     if (check == -1)
                         return;
                     printMenuCardInformation();
-                    std::cout << "error. cannot create new card. " << e.what() << std::endl;
+                    std::cout << e.what() << std::endl;
                 }
                 break;
             }
-            case 4: {
-                All_decks decks_for_update;
+            case 2: {
                 try {
-                    decks_for_update.createNewDeck();
+                    All_decks deck_to_display;
+                    deck_to_display.displayDecks();
                     int check = system("clear");
                     if (check == -1)
                         return;
                     printMenuCardInformation();
-                } catch (int &e) {
+                } catch (std::invalid_argument &e) {
                     int check = system("clear");
                     if (check == -1)
                         return;
                     printMenuCardInformation();
-                    std::cout << "error. cannot create new deck. Wrong number at " << e << " card." << std::endl;
+                    std::cout << e.what();
+                }
+                break;
+            }
+            case 3: {
+                try {
+                    All_cards cards_for_update;
+                    try {
+                        cards_for_update.createNewCard();
+                        int check = system("clear");
+                        if (check == -1)
+                            return;
+                        printMenuCardInformation();
+                    } catch (std::invalid_argument &e) {
+                        int check = system("clear");
+                        if (check == -1)
+                            return;
+                        printMenuCardInformation();
+                        std::cout << "error. cannot create new card. " << e.what() << std::endl;
+                    }
+                } catch (std::invalid_argument &e) {
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
+                    printMenuCardInformation();
+                    std::cout << e.what() << std::endl;
+                }
+
+                break;
+            }
+            case 4: {
+                try {
+                    All_decks decks_for_update;
+                    try {
+                        decks_for_update.createNewDeck();
+                        int check = system("clear");
+                        if (check == -1)
+                            return;
+                        printMenuCardInformation();
+                    } catch (int &e) {
+                        int check = system("clear");
+                        if (check == -1)
+                            return;
+                        printMenuCardInformation();
+                        std::cout << "error. cannot create new deck. Wrong number at " << e << " card." << std::endl;
+                    }
+                } catch (std::invalid_argument &e) {
+                    int check = system("clear");
+                    if (check == -1)
+                        return;
+                    printMenuCardInformation();
+                    std::cout << e.what() << std::endl;
                 }
                 break;
             }
@@ -95,6 +128,8 @@ void cardMenu() {
 All_cards::All_cards() {
     std::ifstream file;
     file.open("src/cards/allCards");
+    if (!file)
+        throw std::invalid_argument("cannot open file");
     char *var = new char[sizeof(int)];
     int number_of_all_cards;
     file.read(var, sizeof(int));
@@ -133,6 +168,8 @@ All_cards::All_cards() {
 All_cards::~All_cards() {
     std::ofstream file;
     file.open("src/cards/allCards");
+    if (!file)
+        throw std::invalid_argument("cannot open file");
     char *var = new char[sizeof(int)];
     int size_of_cards = cards.size();
     memcpy(var, &size_of_cards, sizeof(int));
@@ -230,6 +267,8 @@ long unsigned int All_cards::getSize() {
 All_decks::All_decks() {
     std::ifstream file;
     file.open("src/cards/allDecks");
+    if (!file)
+        throw std::invalid_argument("cannot open file");
     char *var = new char[sizeof(int)];
     int number_of_all_decks;
     file.read(var, sizeof(int));
@@ -251,6 +290,8 @@ All_decks::All_decks() {
 All_decks::~All_decks() {
     std::ofstream file;
     file.open("src/cards/allDecks");
+    if (!file)
+        throw std::invalid_argument("cannot open file");
     char *var = new char[sizeof(int)];
     int number_of_all_decks = decks.size();
     memcpy(var, &number_of_all_decks, sizeof(int));

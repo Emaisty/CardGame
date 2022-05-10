@@ -221,7 +221,13 @@ void Player::savePlayer(std::ostream &file) const {
     long unsigned int size_of_field = player_filed.size();
     memcpy(var, &size_of_field, sizeof(int));
     file.write(var, sizeof(int));
-
+    //save if card play with cards
+    for (long unsigned int i = 0; i < size_of_field; ++i) {
+        bool fl = can_play_card[i];
+        memcpy(computer_player_or_not, &fl, sizeof(bool));
+        file.write(computer_player_or_not, sizeof(bool));
+    }
+    //save cards
     for (long unsigned int i = 0; i < size_of_field; ++i) {
         player_filed[i].writeCard(file);
     }
@@ -287,6 +293,16 @@ void Player::loadPlayer(std::ifstream &file) {
     int size_of_field;
     file.read(var, sizeof(int));
     memcpy(&size_of_field, var, sizeof(int));
+    //can play with cards or not
+    char *can_play = new char[sizeof(bool)];
+    std::vector<bool> can_play_cards;
+    for (int i = 0; i < size_of_field; ++i) {
+        bool fl;
+        file.read(can_play, sizeof(bool));
+        memcpy(&fl, can_play, sizeof(bool));
+        can_play_cards.push_back(fl);
+    }
+    //combat cards
     std::vector<Combat_card> new_players_filed;
     for (int i = 0; i < size_of_field; ++i) {
         int type_of_card;
@@ -371,6 +387,7 @@ void Player::loadPlayer(std::ifstream &file) {
     this->current_mana = current_mana;
     this->mana = mana;
     this->is_computer = is_computer;
+    this->can_play_card = can_play_cards;
     setPlayerFiled(new_players_filed);
     setPlayerHandCards(new_players_hand);
     setPlayerStackCards(new_players_stack);
