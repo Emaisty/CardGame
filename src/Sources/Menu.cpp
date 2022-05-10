@@ -149,7 +149,7 @@ void mainPage() {
                 } catch (std::invalid_argument &e) {
                     system("clear");
                     printMenuInformation();
-                    if (e.what() == "src/Games/") {
+                    if (strcmp(e.what(), "src/Games/") == 0) {
                         std::cout << "You havent saved any game before" << std::endl;
                     } else {
                         std::cout << "Cannot open " << e.what() << std::endl;

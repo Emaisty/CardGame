@@ -6,6 +6,9 @@
 #include <cstring>
 
 bool inputCorrectNumber(int &number, std::istream &iss);
+
+bool inputCorrectNumber(long unsigned int &number, std::istream &iss);
+
 /*
  * Main class of cards
  * have got:

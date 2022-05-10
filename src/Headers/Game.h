@@ -26,9 +26,9 @@ public:
 
     void printPlayerInformation(Player &player);
 
-    void playCardFromHand(Player &player, Player &opponent, int number_of_card);
+    void playCardFromHand(Player &player, Player &opponent, long unsigned int number_of_card);
 
-    static void playCardFromField(Player &player, Player &opponent, int who_attack, int target);
+    static void playCardFromField(Player &player, Player &opponent, long unsigned int who_attack, long unsigned int target);
 
     void saveTheGame();
 

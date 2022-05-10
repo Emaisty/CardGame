@@ -6,9 +6,9 @@ OBJS = $(SRCS:.cpp=.o)
 DEPS = Makefile.depend
 
 INCLUDES = -I./src/Headers
-CXXFLAGS = -std=c++17 -O2 -Wall -lstdc++fs $(INCLUDES)
+CXXFLAGS = -std=c++17 -O2 -Wall  $(INCLUDES)
 LDFLAGS = -lm
-
+LDLIBS = -lstdc++fs
 
 all: $(TARGET)
 

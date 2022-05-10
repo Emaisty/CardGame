@@ -6,10 +6,10 @@ Player::Player(const std::string &name, int hp, int armor, int weapon, bool is_c
                                                                                            is_computer(is_computer) {}
 
 Player::~Player() {
-    for (int i = 0; i < players_cards.size(); ++i)
-        delete players_cards[i];
-    for (int i = 0; i < players_stack.size(); ++i)
-        delete players_stack[i];
+    for (auto & players_card : players_cards)
+        delete players_card;
+    for (auto & i : players_stack)
+        delete i;
 }
 
 Player &Player::operator=(Player const &player) {
@@ -79,13 +79,13 @@ void Player::setPlayerFiled(const std::vector<Combat_card> &playerFiled) {
 }
 
 void Player::setPlayerHandCards(const std::vector<Card *> &new_hand_cards) {
-    for (int i = 0; i < new_hand_cards.size(); ++i)
-        players_cards.push_back(new_hand_cards[i]->clone());
+    for (auto new_hand_card : new_hand_cards)
+        players_cards.push_back(new_hand_card->clone());
 }
 
 void Player::setPlayerStackCards(const std::vector<Card *> &new_stack_cards) {
-    for (int i = 0; i < new_stack_cards.size(); ++i)
-        players_stack.push_back(new_stack_cards[i]->clone());
+    for (auto new_stack_card : new_stack_cards)
+        players_stack.push_back(new_stack_card->clone());
 }
 
 void Player::killUnit(int number_of_card) {
@@ -102,7 +102,7 @@ void Player::healOnUnit(int number_of_card, int value) {
 }
 
 void Player::fromHandToField(int number_of_card) {
-    Combat_card *new_field_card = dynamic_cast<Combat_card *>(players_cards[number_of_card]);
+    auto *new_field_card = dynamic_cast<Combat_card *>(players_cards[number_of_card]);
     this->player_filed.push_back(*new_field_card);
     delete players_cards[number_of_card];
     this->players_cards.erase(this->players_cards.begin() + number_of_card);
@@ -115,7 +115,7 @@ void Player::useSpellCard(int number_of_card) {
 }
 
 void Player::useHeroCard(int number_od_card) {
-    Hero_buff_card *new_hero_card = dynamic_cast<Hero_buff_card *>(players_cards[number_od_card]);
+    auto *new_hero_card = dynamic_cast<Hero_buff_card *>(players_cards[number_od_card]);
     if (new_hero_card->getTypeOfClass() == Card::class_of_card::armor)
         increaseArmor(new_hero_card->getValue());
     if (new_hero_card->getTypeOfClass() == Card::class_of_card::weapon)
@@ -134,8 +134,8 @@ const std::string &Player::getName() const {
 
 
 void Player::setAllCardsPlayable() {
-    for (int i = 0; i < can_play_card.size(); ++i)
-        can_play_card[i] = true;
+    for (auto && i : can_play_card)
+        i = true;
 }
 
 const std::vector<bool> &Player::getCanPlayCard() const {
@@ -185,7 +185,7 @@ void Player::initGame() {
 void Player::savePlayer(std::ostream &file) const {
     char *var = new char[sizeof(int)];
     //save size of name of player
-    int size_of_name = name.size();
+    long unsigned int size_of_name = name.size();
     memcpy(var, &size_of_name, sizeof(int));
     file.write(var, sizeof(int));
 
@@ -218,29 +218,29 @@ void Player::savePlayer(std::ostream &file) const {
     file.write(computer_player_or_not, sizeof(bool));
 
     //save players filed
-    int size_of_field = player_filed.size();
+    long unsigned int size_of_field = player_filed.size();
     memcpy(var, &size_of_field, sizeof(int));
     file.write(var, sizeof(int));
 
-    for (int i = 0; i < size_of_field; ++i) {
+    for (long unsigned int i = 0; i < size_of_field; ++i) {
         player_filed[i].writeCard(file);
     }
 
     //save player hand
-    int size_of_hand = players_cards.size();
+    long unsigned int size_of_hand = players_cards.size();
     memcpy(var, &size_of_hand, sizeof(int));
     file.write(var, sizeof(int));
 
-    for (int i = 0; i < size_of_hand; ++i) {
+    for (long unsigned int i = 0; i < size_of_hand; ++i) {
         players_cards[i]->writeCard(file);
     }
 
     //save player stack
-    int size_of_stack = players_stack.size();
+    long unsigned int size_of_stack = players_stack.size();
     memcpy(var, &size_of_stack, sizeof(int));
     file.write(var, sizeof(int));
 
-    for (int i = 0; i < size_of_stack; ++i) {
+    for (long unsigned int i = 0; i < size_of_stack; ++i) {
         players_stack[i]->writeCard(file);
     }
     delete[] var;
@@ -374,11 +374,11 @@ void Player::loadPlayer(std::ifstream &file) {
     setPlayerFiled(new_players_filed);
     setPlayerHandCards(new_players_hand);
     setPlayerStackCards(new_players_stack);
-    for (int i = 0; i < new_players_hand.size(); ++i) {
-        delete new_players_hand[i];
+    for (auto & i : new_players_hand) {
+        delete i;
     }
-    for (int i = 0; i < new_players_stack.size(); ++i) {
-        delete new_players_stack[i];
+    for (auto & i : new_players_stack) {
+        delete i;
     }
     delete[] var;
     delete[] password_raw;

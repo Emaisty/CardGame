@@ -9,11 +9,11 @@ bool Game::humanRound(Player &player, Player &opponent) {
     while (input != "end") {
         if (input == "attack") {
             try {
-                int who_attack = -1, target = -1;
+                long unsigned int who_attack = -1, target = -1;
                 if (!inputCorrectNumber(who_attack, std::cin) ||
-                    who_attack < 1 && who_attack > player.getPlayerFiled().size())
+                    who_attack < 1 || who_attack > player.getPlayerFiled().size())
                     throw std::invalid_argument("invalid input of your card");
-                if (!inputCorrectNumber(target, std::cin) || target < 0 && target > opponent.getPlayerFiled().size())
+                if (!inputCorrectNumber(target, std::cin) || target < 0 || target > opponent.getPlayerFiled().size())
                     throw std::invalid_argument("invalid input of target");
                 who_attack--;
                 target--;
@@ -25,8 +25,8 @@ bool Game::humanRound(Player &player, Player &opponent) {
             }
         } else if (input == "hand") {
             try {
-                int size_of_cards = player.getPlayerCards().size();
-                int number_of_card = -1;
+                long unsigned int size_of_cards = player.getPlayerCards().size();
+                long unsigned int number_of_card = -1;
                 if (!inputCorrectNumber(number_of_card, std::cin) || number_of_card < 0 ||
                     number_of_card > size_of_cards)
                     throw std::invalid_argument("invalid input of card");
@@ -45,6 +45,8 @@ bool Game::humanRound(Player &player, Player &opponent) {
                 printInformation(player, opponent);
                 std::cout << "Cannot open file: " << e.what();
             }
+        } else if (input == "leave") {
+            return false;
         } else {
             printInformation(player, opponent);
             std::cout << "Error: unknown command" << std::endl;
@@ -59,19 +61,19 @@ bool Game::humanRound(Player &player, Player &opponent) {
 bool Game::computerRound(Player &player, Player &opponent) {
     //play cards from field
     if (player.getPlayerFiled().size() > 1) {
-        int who_attack_hero = 0;
+        long unsigned int who_attack_hero = 0;
         //card with most value attack hero, others - attack cards if can
-        for (int i = 1; i < player.getPlayerFiled().size(); ++i) {
+        for (long unsigned int i = 1; i < player.getPlayerFiled().size(); ++i) {
             if (player.getPlayerFiled()[i].getValue() > player.getPlayerFiled()[who_attack_hero].getValue())
                 who_attack_hero = i;
         }
         playCardFromField(player, opponent, who_attack_hero, -1);
-        for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
+        for (long unsigned int i = 0; i < player.getPlayerFiled().size(); ++i) {
             if (player.getCanPlayCard()[i]) {
                 // attack opp filed cards
                 if (opponent.getPlayerFiled().size() != 0) {
                     int target = 0;
-                    for (int j = 1; j < opponent.getPlayerFiled().size(); ++j) {
+                    for (long unsigned int j = 1; j < opponent.getPlayerFiled().size(); ++j) {
                         if (opponent.getPlayerFiled()[j].getHp() > opponent.getPlayerFiled()[target].getHp())
                             target = j;
                     }
@@ -84,15 +86,15 @@ bool Game::computerRound(Player &player, Player &opponent) {
         }
     } else {
         // if have got 0 or 1 - attack opponent hero
-        for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
+        for (long unsigned int i = 0; i < player.getPlayerFiled().size(); ++i) {
             if (player.getCanPlayCard()[i])
                 playCardFromField(player, opponent, i, -1);
         }
     }
     //play from hand
-    int card_from_hand = 0;
+    long unsigned int card_from_hand = 0;
     //find most costable card
-    for (int i = 1; i < player.getPlayerCards().size(); ++i) {
+    for (long unsigned int i = 1; i < player.getPlayerCards().size(); ++i) {
         if (player.getPlayerCards()[i]->getMana() > player.getPlayerCards()[card_from_hand]->getMana() &&
             player.getPlayerCards()[i]->getMana() <= player.getMana())
             card_from_hand = i;
@@ -100,7 +102,7 @@ bool Game::computerRound(Player &player, Player &opponent) {
     //try to move from hand to filed, if enough mana
     if (player.getPlayerCards()[card_from_hand]->getMana() <= player.getMana())
         playCardFromHand(player, opponent, card_from_hand);
-    for (int i = 0; i < player.getPlayerCards().size(); ++i) {
+    for (long unsigned int i = 0; i < player.getPlayerCards().size(); ++i) {
         if (player.getPlayerCards()[i]->getMana() <= player.getMana())
             playCardFromHand(player, opponent, i);
     }
@@ -134,7 +136,7 @@ void Game::printPlayerInformation(Player &player) {
     std::cout << "Hp: " << player.getHp() << " | Armor: " << player.getArmor() << " | Weapon: "
               << player.getWeapon() << "| Mana: " << player.getMana() << std::endl;
     std::cout << "========\n";
-    for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
+    for (long unsigned int i = 0; i < player.getPlayerFiled().size(); ++i) {
         std::cout << i + 1 << ") " << player.getPlayerFiled()[i].getName() << " ("
                   << player.getPlayerFiled()[i].getValue() << ") ("
                   << player.getPlayerFiled()[i].getHp() << ")";
@@ -147,12 +149,12 @@ void Game::printPlayerInformation(Player &player) {
 
 void Game::printPlayerHandInformation(Player &player) {
     std::cout << "Cards :";
-    for (int i = 0; i < player.getPlayerCards().size(); ++i) {
+    for (long unsigned int i = 0; i < player.getPlayerCards().size(); ++i) {
         std::cout << " (" << i + 1 << ") " << player.getPlayerCards()[i]->getName();
     }
 }
 
-void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card) {
+void Game::playCardFromHand(Player &player, Player &opponent, long unsigned int number_of_card) {
     if (player.getMana() < player.getPlayerCards()[number_of_card]->getMana())
         throw std::invalid_argument("not enough mana");
     //if card is playable
@@ -174,7 +176,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
                     return;
                 } else {
                     target = 0;
-                    for (int i = 1; i < player.getPlayerFiled().size(); ++i) {
+                    for (long unsigned int i = 1; i < player.getPlayerFiled().size(); ++i) {
                         if (player.getPlayerFiled()[i].getHp() < player.getPlayerFiled()[target].getHp())
                             target = i;
                     }
@@ -189,7 +191,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
                 throw std::invalid_argument("target index out of range");
             player.healOnUnit(target, spell->getValue());
         } else {
-            for (int i = 0; i < player.getPlayerFiled().size(); ++i) {
+            for (long unsigned int i = 0; i < player.getPlayerFiled().size(); ++i) {
                 player.healOnUnit(i, spell->getValue());
             }
         }
@@ -201,17 +203,17 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
     if (player.getPlayerCards()[number_of_card]->getTypeOfClass() == Card::spell) {
         Spell_card *spell = dynamic_cast<Spell_card *>(player.getPlayerCards()[number_of_card]);
         if (spell->isTarget()) {
-            int target = -1;
+            long unsigned int target = -1;
             if (player.isComputer()) {
                 //if computer - choose opponent card with the lowest hp
-                if (opponent.getPlayerFiled().size() == 0) {
+                if (opponent.getPlayerFiled().empty()) {
                     opponent.takeDamage(spell->getValue());
                     player.decreaseMana(player.getPlayerCards()[number_of_card]->getMana());
                     player.useSpellCard(number_of_card);
                     return;
                 } else {
                     target = 0;
-                    for (int i = 1; i < opponent.getPlayerFiled().size(); ++i) {
+                    for (long unsigned int i = 1; i < opponent.getPlayerFiled().size(); ++i) {
                         if (opponent.getPlayerFiled()[i].getHp() < opponent.getPlayerFiled()[target].getHp())
                             target = i;
                     }
@@ -229,7 +231,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
             if (opponent.getPlayerFiled()[target].getHp() <= 0)
                 opponent.killUnit(target);
         } else {
-            for (int i = 0; i < opponent.getPlayerFiled().size(); ++i) {
+            for (long unsigned int i = 0; i < opponent.getPlayerFiled().size(); ++i) {
                 opponent.damageOnUnit(i, spell->getValue());
                 if (opponent.getPlayerFiled()[i].getHp() <= 0)
                     opponent.killUnit(i);
@@ -249,7 +251,7 @@ void Game::playCardFromHand(Player &player, Player &opponent, int number_of_card
     }
 }
 
-void Game::playCardFromField(Player &player, Player &opponent, int who_attack, int target) {
+void Game::playCardFromField(Player &player, Player &opponent, long unsigned int who_attack, long unsigned int target) {
     if (!player.getCanPlayCard()[who_attack]) {
         throw std::invalid_argument("cannot play with this card right now");
     }

@@ -9,6 +9,16 @@ bool inputCorrectNumber(int &number, std::istream &iss) {
     return true;
 }
 
+bool inputCorrectNumber(long unsigned int &number, std::istream &iss) {
+    std::string user_input;
+    iss >> user_input;
+    try {
+        number = std::stoul(user_input);
+    } catch (const std::invalid_argument &) { return false; } catch (const std::out_of_range &) { return false; }
+    return true;
+}
+
+
 void Card::setName(const std::string &name) {
     Card::name = name;
 }

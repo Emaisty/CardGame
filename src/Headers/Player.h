@@ -85,8 +85,8 @@ public:
     void setIsComputer(bool isComputer);
 
 protected:
-    int hp, armor, weapon, current_mana = 1, mana = 1;
     std::string name;
+    int hp, armor, weapon, current_mana = 1, mana = 1;
     size_t password;
     bool is_computer;
     std::vector<Combat_card> player_filed;
